@@ -21,7 +21,7 @@ class Game {
         this.enemySpawnInterval = 3;
         this.difficultyMultiplier = 1;
 
-        this.uiManager = new UIManager();
+        this.uiManager = new UIManager(this);
         this.powerUpManager = new PowerUpManager();
         this.lastTime = 0;
         this.isPaused = false;
@@ -29,6 +29,21 @@ class Game {
         this.initControls();
         this.uiManager.showMainMenu();
         this.uiManager.updateHighScore();
+    }
+
+    // Utility method to hide/show all sprite elements
+    hideAllSprites() {
+        const allSprites = document.querySelectorAll('img[src*="sprites/"]');
+        allSprites.forEach(sprite => {
+            sprite.style.display = 'none';
+        });
+    }
+
+    showAllSprites() {
+        const allSprites = document.querySelectorAll('img[src*="sprites/"]');
+        allSprites.forEach(sprite => {
+            sprite.style.display = 'block';
+        });
     }
 
     initControls() {
@@ -57,6 +72,15 @@ class Game {
     }
 
     resetGame() {
+        // Clean up existing entities before creating new ones
+        if (this.player) {
+            this.player.destroy();
+        }
+        this.enemies.forEach(enemy => enemy.destroy());
+        this.enemyProjectiles.forEach(proj => proj.destroy());
+        this.xpOrbs.forEach(orb => orb.destroy());
+        this.healthOrbs.forEach(orb => orb.destroy());
+        
         this.player = new Player(this.width / 2, this.height / 2);
         this.enemies = [];
         this.enemyProjectiles = [];

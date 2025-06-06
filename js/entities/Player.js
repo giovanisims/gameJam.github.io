@@ -167,4 +167,11 @@ class Player extends Entity {
         powerUp.apply(this);
         game.uiManager.showMessage(`${powerUp.name} adquirido!`, 2);
     }
+
+    destroy() {
+        // Clean up player projectiles
+        this.projectiles.forEach(proj => proj.destroy());
+        // Call parent destroy method to clean up sprite element
+        super.destroy();
+    }
 }

@@ -12,7 +12,7 @@ class Projectile extends Entity {
         super.update(dt);
         if (this.position.x < 0 || this.position.x > gameWidth ||
             this.position.y < 0 || this.position.y > gameHeight) {
-            this.active = false;
+            this.destroy(); // Clean up sprite element
         }
     }
 
@@ -21,7 +21,7 @@ class Projectile extends Entity {
 
         this.hitEnemies.add(enemy);
         if (this.pierceCount <= 0) {
-            this.active = false;
+            this.destroy(); // Clean up sprite element
         } else {
             this.pierceCount--;
         }

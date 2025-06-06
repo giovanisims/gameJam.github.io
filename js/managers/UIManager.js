@@ -1,6 +1,7 @@
 // UIManager - handles all user interface elements and screen transitions
 class UIManager {
-    constructor() {
+    constructor(game = null) {
+        this.game = game;
         this.scoreDisplay = document.getElementById('scoreDisplay');
         this.levelDisplay = document.getElementById('levelDisplay');
         this.livesDisplay = document.getElementById('livesDisplay');
@@ -21,6 +22,11 @@ class UIManager {
     }
 
     showMainMenu() {
+        // Hide all sprites when showing menu
+        if (this.game) {
+            this.game.hideAllSprites();
+        }
+        
         this.mainMenu.style.display = 'flex';
         this.aboutScreen.style.display = 'none';
         this.gameOverScreen.style.display = 'none';
@@ -32,6 +38,11 @@ class UIManager {
     }
 
     showAboutScreen() {
+        // Hide all sprites when showing about screen
+        if (this.game) {
+            this.game.hideAllSprites();
+        }
+        
         this.mainMenu.style.display = 'none';
         this.aboutScreen.style.display = 'flex';
     }
@@ -43,6 +54,11 @@ class UIManager {
         this.pauseMenu.style.display = 'none';
         this.gameCanvas.style.display = 'block';
         this.showGameUI();
+        
+        // Show sprites when game is active
+        if (this.game) {
+            this.game.showAllSprites();
+        }
     }
 
     showGameOverScreen(score) {
@@ -56,6 +72,11 @@ class UIManager {
             this.finalScoreDisplay.textContent = `Sua Pontuação: ${score}`;
         }
         
+        // Hide all sprites when showing game over screen
+        if (this.game) {
+            this.game.hideAllSprites();
+        }
+        
         this.mainMenu.style.display = 'none';
         this.aboutScreen.style.display = 'none';
         this.levelUpScreen.style.display = 'none';
@@ -67,6 +88,11 @@ class UIManager {
     }
 
     showPauseMenu(currentScore) {
+        // Hide all sprites when showing pause menu
+        if (this.game) {
+            this.game.hideAllSprites();
+        }
+        
         this.currentScoreDisplay.textContent = currentScore;
         this.pauseMenu.style.display = 'flex';
         this.gameCanvas.style.display = 'none';
@@ -77,9 +103,19 @@ class UIManager {
         this.pauseMenu.style.display = 'none';
         this.gameCanvas.style.display = 'block';
         this.showGameUI();
+        
+        // Show sprites when resuming game
+        if (this.game) {
+            this.game.showAllSprites();
+        }
     }
 
     showLevelUpScreen() {
+        // Hide all sprites when showing level up screen
+        if (this.game) {
+            this.game.hideAllSprites();
+        }
+        
         this.levelUpScreen.style.display = 'flex';
     }
 

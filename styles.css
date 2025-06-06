@@ -67,6 +67,7 @@ canvas {
 
 #gameCanvas {
     display: none; /* Escondido inicialmente */
+    position: relative;
 }
 
 .ui-element {
@@ -124,4 +125,20 @@ canvas {
     padding: 20px;
     background-color: rgba(0,0,0,0.7);
     border-radius: 10px;
+}
+
+/* Sprite positioning for game entities */
+/* Sprite positioning - positioned above canvas but below UI menus */
+body img[src*="sprites/"] {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10; /* Above canvas (z-index 1) but below UI menus (z-index 1000+) */
+    image-rendering: pixelated;
+    transform-origin: center;
+}
+
+/* Ensure all UI menus are above sprites */
+.menu-container, .about-container, .game-over-container, .level-up-container {
+    z-index: 1000;
+    position: relative;
 }

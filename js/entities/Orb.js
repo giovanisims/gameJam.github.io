@@ -14,7 +14,7 @@ class ExperienceOrb extends Entity {
         const distanceToPlayer = this.position.distance(player.position);
         if (distanceToPlayer < player.radius + this.radius) {
             player.addXP(this.value);
-            this.active = false;
+            this.destroy(); // Clean up sprite element
         } else if (distanceToPlayer < this.collectionRadius) {
             const direction = player.position.subtract(this.position).normalize();
             this.velocity = direction.multiply(this.collectionSpeed);
@@ -36,7 +36,7 @@ class HealthOrb extends Entity {
         if (this.checkCollision(player)) {
             player.health = Math.min(player.maxHealth, player.health + this.healAmount);
             game.uiManager.updatePlayerHealth();
-            this.active = false;
+            this.destroy(); // Clean up sprite element
         }
     }
 }

@@ -7,8 +7,8 @@ class Entity {
         this.color = color;
         this.active = true; // Para remoção de entidades
         
-        // Sprite handling
-        this.sprite = null;
+        // Sprite handling with HTML img elements
+        this.spriteElement = null;
         this.spriteLoaded = false;
         this.spriteSize = radius * 2; // Default sprite size based on radius
         
@@ -18,38 +18,84 @@ class Entity {
     }
 
     loadSprite(spritePath) {
-        this.sprite = new Image();
-        this.sprite.onload = () => {
+        // Create HTML img element for animated sprites
+        this.spriteElement = document.createElement('img');
+        this.spriteElement.src = spritePath;
+        this.spriteElement.style.position = 'absolute';
+        this.spriteElement.style.width = this.spriteSize + 'px';
+        this.spriteElement.style.height = this.spriteSize + 'px';
+        this.spriteElement.style.pointerEvents = 'none'; // Don't interfere with game clicks
+        this.spriteElement.style.zIndex = '10'; // Above canvas but below UI
+        this.spriteElement.style.imageRendering = 'pixelated'; // For pixel art sprites
+        
+        this.spriteElement.onload = () => {
             this.spriteLoaded = true;
+            console.log(`✅ Sprite loaded successfully: ${spritePath}`);
         };
-        this.sprite.src = spritePath;
+        
+        this.spriteElement.onerror = () => {
+            console.error(`❌ Failed to load sprite: ${spritePath}`);
+            this.spriteLoaded = false;
+        };
+        
+        // Add to DOM
+        document.body.appendChild(this.spriteElement);
+        
+        console.log(`🔄 Loading sprite: ${spritePath}`);
     }
 
     update(dt) {
         this.position = this.position.add(this.velocity.multiply(dt));
+        
+        // Update sprite position if it exists
+        if (this.spriteElement && this.spriteLoaded) {
+            // Get canvas offset to position sprite correctly
+            const canvas = document.getElementById('gameCanvas');
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            // Check if entity is within canvas boundaries (with small buffer for smooth transitions)
+            const buffer = 10; // Small buffer to allow smooth entry/exit
+            const isWithinCanvas = 
+                this.position.x >= -buffer && 
+                this.position.x <= canvas.width + buffer &&
+                this.position.y >= -buffer && 
+                this.position.y <= canvas.height + buffer;
+            
+            // Position sprite
+            this.spriteElement.style.left = (canvasRect.left + this.position.x - this.spriteSize / 2) + 'px';
+            this.spriteElement.style.top = (canvasRect.top + this.position.y - this.spriteSize / 2) + 'px';
+            
+            // Hide sprite if entity is outside canvas boundaries or inactive
+            this.spriteElement.style.display = (this.active && isWithinCanvas) ? 'block' : 'none';
+        }
     }
 
     draw(ctx) {
         if (!this.active) return;
         
-        // Draw sprite if loaded, otherwise fall back to colored circle
-        if (this.sprite && this.spriteLoaded) {
-            const drawSize = this.spriteSize;
-            ctx.drawImage(
-                this.sprite,
-                this.position.x - drawSize / 2,
-                this.position.y - drawSize / 2,
-                drawSize,
-                drawSize
-            );
-        } else {
-            // Fallback to colored circle
-            ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-            ctx.closePath();
+        // Only draw fallback circle if sprite is not loaded
+        // The HTML img element handles the actual sprite rendering
+        if (!this.spriteElement || !this.spriteLoaded) {
+            this.drawFallback(ctx);
         }
+        // Note: Sprite is positioned by the update() method, not drawn here
+    }
+    
+    drawFallback(ctx) {
+        // Fallback to colored circle
+        ctx.beginPath();
+        ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    destroy() {
+        // Clean up HTML sprite element when entity is destroyed
+        if (this.spriteElement && this.spriteElement.parentNode) {
+            this.spriteElement.parentNode.removeChild(this.spriteElement);
+        }
+        this.active = false;
     }
 
     checkCollision(otherEntity) {

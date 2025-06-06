@@ -46,7 +46,7 @@ class Enemy extends Entity {
     takeDamage(amount) {
         this.health -= amount;
         if (this.health <= 0) {
-            this.active = false;
+            this.destroy(); // Clean up sprite element
             game.player.addXP(this.xpValue);
             game.score += this.xpValue * 10;
             game.uiManager.updateScore(game.score);
@@ -215,7 +215,7 @@ class BossEnemy extends Enemy {
     takeDamage(amount) {
         this.health -= amount;
         if (this.health <= 0) {
-            this.active = false;
+            this.destroy(); // Clean up sprite element
             game.player.addXP(this.xpValue);
             game.score += this.xpValue * 10;
             game.uiManager.updateScore(game.score);
