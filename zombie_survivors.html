@@ -113,18 +113,18 @@
 </head>
 <body>
     <div id="mainMenu" class="menu-container">
-        <h1>Roguelike Bullet Heaven</h1>
+        <h1>Dracula Survivors</h1>
         <button id="startGameBtn" class="menu-button">Iniciar Jogo</button>
         <button id="aboutBtn" class="menu-button">Sobre</button>
-        <p style="margin-top: 20px; font-size: 0.9em;">Use WASD ou Setas para mover. O personagem atira automaticamente.</p>
     </div>
-
     <div id="aboutScreen" class="about-container" style="display:none;">
         <h1>Sobre o Jogo</h1>
-        <p>Este jogo foi desenvolvido como um projeto de exemplo.</p>
+        <p>Use WASD ou Setas para mover. O personagem atira automaticamente.</p>
         <p><strong>Participantes:</strong></p>
-        <p>- Gemini (Modelo de Linguagem Grande)</p>
-        <p>- Você (O Jogador Incrível!)</p>
+        <p>- Giovani Nota Simões</p>
+        <p>- Livia Rosemach Oliveira</p>
+        <p>- Sarah Maneira</p>
+        <p>- Enzo Leitão</p>
         <button id="backToMenuBtn" class="menu-button">Voltar ao Menu</button>
     </div>
 
@@ -743,7 +743,7 @@
                 document.getElementById('gameOverToMenuBtn').addEventListener('click', () => this.uiManager.showMainMenu());
 
                 window.addEventListener('keydown', (e) => {
-                    if (this.player) this.player.keys[e.key.toLowerCase()] = true;
+                    if (this.player) this.player.keys[e.key] = true;
                     if (e.key === 'Escape' && this.gameState === 'playing') {
                         this.pauseGame();
                     } else if (e.key === 'Escape' && this.gameState === 'paused') {
@@ -751,7 +751,7 @@
                     }
                 });
                 window.addEventListener('keyup', (e) => {
-                    if (this.player) this.player.keys[e.key.toLowerCase()] = false;
+                    if (this.player) this.player.keys[e.key] = false;
                 });
             }
 
@@ -764,7 +764,7 @@
                 this.score = 0;
                 this.gameTime = 0;
                 this.enemySpawnTimer = 0;
-                this.difficultyMultiplier = 1; // Reset difficulty multiplier
+                this.difficultyMultiplier = 1;
                 this.isPaused = false;
 
                 this.player.level = 1;
@@ -882,7 +882,6 @@
                 if (Math.floor(this.gameTime) % 30 === 0 && Math.floor(this.gameTime) > 0 && Math.floor(this.gameTime) !== Math.floor(this.gameTime - dt)) {
                     this.difficultyMultiplier += 0.2;
                     this.enemySpawnInterval = Math.max(0.5, this.enemySpawnInterval * 0.92); 
-                     this.uiManager.showMessage(`Dificuldade Aumentada! Nível ${Math.floor(this.difficultyMultiplier*5)}`, 3);
                 }
 
                 if (this.enemySpawnTimer >= this.enemySpawnInterval) {
