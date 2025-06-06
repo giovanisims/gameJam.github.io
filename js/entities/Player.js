@@ -1,7 +1,7 @@
 // Player class - main character controlled by the user
 class Player extends Entity {
     constructor(x, y) {
-        super(x, y, 15, '#00FFFF'); // Ciano
+        super(x, y, 15, '#00FFFF', 'sprites/player.webp'); // Ciano with player sprite
         this.speed = 250; // pixels por segundo
         this.keys = {}; // Para armazenar o estado das teclas pressionadas
         this.health = 100;
@@ -21,6 +21,9 @@ class Player extends Entity {
         this.projectileSpread = 0.1;
         this.invulnerableTime = 1.5;
         this.invulnerableTimer = 0;
+        
+        // Player sprite should be a bit larger
+        this.spriteSize = 30;
     }
 
     handleInput(dt) {

@@ -69,6 +69,8 @@ class Enemy extends Entity {
 class ChaserEnemy extends Enemy {
     constructor(x, y) {
         super(x, y, 12, '#FF6347', 100, 50, 10, 20);
+        this.loadSprite('sprites/melee_enemy.webp');
+        this.spriteSize = 24; // Slightly larger than radius for visibility
     }
 }
 
@@ -78,6 +80,8 @@ class ShooterEnemy extends Enemy {
         this.shootCooldown = 2.5;
         this.projectileSpeed = 200;
         this.projectileDamage = 10;
+        this.loadSprite('sprites/ranged_enemy.webp');
+        this.spriteSize = 30; // Larger for shooter enemy
     }
     
     shoot(targetPosition) {
@@ -117,6 +121,10 @@ class BossEnemy extends Enemy {
         this.projectileDamage = 20 + Math.floor(level / 5) * 5;
         this.projectileSize = 8;
         this.projectileColor = '#FF4444';
+        
+        // Load boss sprite and set appropriate size
+        this.loadSprite('sprites/boss.webp');
+        this.spriteSize = bossSize * 2; // Boss should be quite large
         
         // Boss special abilities
         this.chargeSpeed = this.speed * 2.5;
