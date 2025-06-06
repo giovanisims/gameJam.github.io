@@ -1,0 +1,167 @@
+// Player class - main character controlled by the user
+class Player extends Entity {
+    constructor(x, y) {
+        super(x, y, 15, '#00FFFF'); // Ciano
+        this.speed = 250; // pixels por segundo
+        this.keys = {}; // Para armazenar o estado das teclas pressionadas
+        this.health = 100;
+        this.maxHealth = 100;
+        this.lives = 3;
+        this.level = 1;
+        this.xp = 0;
+        this.xpToNextLevel = 100;
+        this.shootCooldown = 0.5; // segundos
+        this.shootTimer = 0;
+        this.projectiles = [];
+        this.projectileSpeed = 400;
+        this.projectileDamage = 10;
+        this.projectileSize = 5;
+        this.projectilePierce = 0;
+        this.numProjectiles = 1;
+        this.projectileSpread = 0.1;
+        this.invulnerableTime = 1.5;
+        this.invulnerableTimer = 0;
+    }
+
+    handleInput(dt) {
+        let moveX = 0;
+        let moveY = 0;
+        if (this.keys['w'] || this.keys['ArrowUp']) moveY -= 1;
+        if (this.keys['s'] || this.keys['ArrowDown']) moveY += 1;
+        if (this.keys['a'] || this.keys['ArrowLeft']) moveX -= 1;
+        if (this.keys['d'] || this.keys['ArrowRight']) moveX += 1;
+
+        if (moveX !== 0 || moveY !== 0) {
+            const moveVector = new Vector2D(moveX, moveY).normalize();
+            this.velocity = moveVector.multiply(this.speed);
+        } else {
+            this.velocity = new Vector2D(0, 0);
+        }
+    }
+
+    shoot(targetPosition) {
+        if (this.shootTimer <= 0) {
+            const baseAngle = targetPosition.subtract(this.position).angle();
+
+            for (let i = 0; i < this.numProjectiles; i++) {
+                let currentAngle = baseAngle;
+                if (this.numProjectiles > 1) {
+                    currentAngle += (i - (this.numProjectiles - 1) / 2) * this.projectileSpread;
+                }
+                const velocity = Vector2D.fromAngle(currentAngle, this.projectileSpeed);
+                const projectile = new Projectile(
+                    this.position.x,
+                    this.position.y,
+                    this.projectileSize,
+                    '#FFFF00',
+                    velocity,
+                    this.projectileDamage,
+                    this.projectilePierce
+                );
+                this.projectiles.push(projectile);
+            }
+            this.shootTimer = this.shootCooldown;
+        }
+    }
+
+    update(dt, gameWidth, gameHeight, enemies) {
+        this.handleInput(dt);
+        super.update(dt);
+
+        this.position.x = Math.max(this.radius, Math.min(this.position.x, gameWidth - this.radius));
+        this.position.y = Math.max(this.radius, Math.min(this.position.y, gameHeight - this.radius));
+
+        if (this.shootTimer > 0) {
+            this.shootTimer -= dt;
+        }
+
+        if (this.invulnerableTimer > 0) {
+            this.invulnerableTimer -= dt;
+        }
+
+        this.projectiles = this.projectiles.filter(p => p.active);
+        this.projectiles.forEach(p => p.update(dt, gameWidth, gameHeight));
+
+        if (enemies && enemies.length > 0) {
+            let closestEnemy = null;
+            let minDistance = Infinity;
+            enemies.forEach(enemy => {
+                if(enemy.active) {
+                    const distance = this.position.distance(enemy.position);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestEnemy = enemy;
+                    }
+                }
+            });
+            if (closestEnemy) {
+                this.shoot(closestEnemy.position);
+            }
+        }
+    }
+
+    draw(ctx) {
+        if (this.invulnerableTimer > 0) {
+            if (Math.floor(this.invulnerableTimer * 10) % 2 === 0) {
+                return;
+            }
+        }
+        super.draw(ctx);
+        this.projectiles.forEach(p => p.draw(ctx));
+
+        // Health bar
+        ctx.fillStyle = 'grey';
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 10, this.radius * 2, 5);
+        ctx.fillStyle = 'green';
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 10, this.radius * 2 * (this.health / this.maxHealth), 5);
+    }
+
+    takeDamage(amount) {
+        if (this.invulnerableTimer > 0) return false;
+
+        this.health -= amount;
+        this.invulnerableTimer = this.invulnerableTime;
+        if (this.health <= 0) {
+            this.lives--;
+            if (this.lives <= 0) {
+                game.gameOver();
+            } else {
+                this.health = this.maxHealth;
+                game.uiManager.updateLives(this.lives);
+                game.uiManager.showMessage(`Vida perdida! ${this.lives} restantes.`, 2);
+            }
+        }
+        game.uiManager.updatePlayerHealth();
+        return true;
+    }
+
+    addXP(amount) {
+        this.xp += amount;
+        if (this.xp >= this.xpToNextLevel) {
+            this.levelUp();
+        }
+        game.uiManager.updateXPBar(this.xp, this.xpToNextLevel);
+    }
+
+    levelUp() {
+        this.level++;
+        this.xp = 0;
+        this.xpToNextLevel = Math.floor(this.xpToNextLevel * 1.5);
+        game.uiManager.updateLevel(this.level);
+        game.uiManager.updateXPBar(this.xp, this.xpToNextLevel);
+        
+        // Check if this is a boss level (every 10 levels)
+        if (this.level % 10 === 0) {
+            game.spawnBoss();
+            game.uiManager.showMessage(`Nível ${this.level}! Boss apareceu!`, 4);
+        }
+        
+        game.pauseGame(true);
+        game.powerUpManager.offerPowerUps();
+    }
+
+    applyPowerUp(powerUp) {
+        powerUp.apply(this);
+        game.uiManager.showMessage(`${powerUp.name} adquirido!`, 2);
+    }
+}
