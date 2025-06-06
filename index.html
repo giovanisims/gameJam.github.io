@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roguelike Bullet Heaven</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="mainMenu" class="menu-container">
+        <h1>Dracula Survivors</h1>
+        <p id="highScoreDisplay" style="margin: 10px 0; font-size: 1.2em; color: #00ffff;">Melhor Pontuação: 0</p>
+        <button id="startGameBtn" class="menu-button">Iniciar Jogo</button>
+        <button id="aboutBtn" class="menu-button">Sobre</button>
+    </div>
+    <div id="aboutScreen" class="about-container" style="display:none;">
+        <h1>Sobre o Jogo</h1>
+        <p>Use WASD ou Setas para mover. O personagem atira automaticamente.</p>
+        <p><strong>Participantes:</strong></p>
+        <p>- Giovani Nota Simões</p>
+        <p>- Livia Rosemach Oliveira</p>
+        <p>- Sarah Maneira</p>
+        <p>- Enzo Leitão</p>
+        <button id="backToMenuBtn" class="menu-button">Voltar ao Menu</button>
+    </div>
+
+    <div id="gameOverScreen" class="game-over-container" style="display:none;">
+        <h1>Fim de Jogo!</h1>
+        <p id="finalScore">Sua Pontuação: 0</p>
+        <button id="restartGameBtn" class="menu-button">Reiniciar</button>
+        <button id="gameOverToMenuBtn" class="menu-button">Menu Principal</button>
+    </div>
+
+    <div id="levelUpScreen" class="level-up-container" style="display:none;">
+        <h1>Level Up!</h1>
+        <p>Escolha uma melhoria:</p>
+        <div id="powerUpOptions">
+            <!-- Javascript populates this with the power up options on level up -->
+        </div>
+    </div>
+
+    <div id="pauseMenu" class="menu-container" style="display:none;">
+        <h1>Jogo Pausado</h1>
+        <p>Score Atual: <span id="currentScoreDisplay">0</span></p>
+        <button id="resumeGameBtn" class="menu-button">Continuar</button>
+        <button id="endRunBtn" class="menu-button">Finalizar Partida</button>
+        <button id="pauseToMenuBtn" class="menu-button">Menu Principal</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+    <div id="scoreDisplay" class="ui-element" style="display:none;">Score: 0</div>
+    <div id="levelDisplay" class="ui-element" style="display:none;">Nível: 1</div>
+    <div id="livesDisplay" class="ui-element" style="display:none;">Vidas: 3</div>
+    <div id="xpBarContainer" style="display:none;"><div id="xpBar"></div></div>
+    <div id="messageDisplay"></div>
+
+    <script src="game.js"></script>
+</body>
+</html>
