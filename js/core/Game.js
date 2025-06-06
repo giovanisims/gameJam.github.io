@@ -3,10 +3,14 @@ class Game {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
-        this.width = 800;
-        this.height = 600;
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
+        
+        // Set larger base canvas size and make it responsive
+        this.baseWidth = 1200;
+        this.baseHeight = 800;
+        this.updateCanvasSize();
+        
+        // Add resize listener for responsiveness
+        window.addEventListener('resize', () => this.updateCanvasSize());
 
         this.gameState = 'mainMenu';
         this.player = null;
@@ -29,6 +33,33 @@ class Game {
         this.initControls();
         this.uiManager.showMainMenu();
         this.uiManager.updateHighScore();
+    }
+
+    // Method to update canvas size responsively
+    updateCanvasSize() {
+        const maxWidth = Math.min(window.innerWidth * 0.95, this.baseWidth);
+        const maxHeight = Math.min(window.innerHeight * 0.85, this.baseHeight);
+        
+        // Maintain aspect ratio
+        const aspectRatio = this.baseWidth / this.baseHeight;
+        let newWidth, newHeight;
+        
+        if (maxWidth / maxHeight > aspectRatio) {
+            newHeight = maxHeight;
+            newWidth = newHeight * aspectRatio;
+        } else {
+            newWidth = maxWidth;
+            newHeight = newWidth / aspectRatio;
+        }
+        
+        this.width = newWidth;
+        this.height = newHeight;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        
+        // Update canvas CSS size for proper display
+        this.canvas.style.width = this.width + 'px';
+        this.canvas.style.height = this.height + 'px';
     }
 
     // Utility method to hide/show all sprite elements

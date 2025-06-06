@@ -13,11 +13,15 @@ body {
 }
 
 canvas {
-    border: 2px solid #333;
+    border: 2.4px solid #333; /* 20% bigger border */
     background-color: #000;
     display: block; /* Remove espaço extra abaixo do canvas */
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    border-radius: 9.6px; /* 20% bigger border radius */
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.5); /* 20% bigger shadow */
+    max-width: 95vw;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
 }
 
 .menu-container, .about-container, .game-over-container, .level-up-container {
@@ -25,27 +29,28 @@ canvas {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 24px; /* 20% bigger padding */
     background-color: rgba(30, 30, 30, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 12px; /* 20% bigger border radius */
+    box-shadow: 0 0 12px rgba(0,0,0,0.5); /* 20% bigger shadow */
     text-align: center;
 }
 
 .menu-container h1, .about-container h1, .game-over-container h1, .level-up-container h1 {
     color: #00ffff;
-    margin-bottom: 20px;
+    margin-bottom: 24px; /* 20% bigger margin */
+    font-size: 1.44em; /* 20% bigger font size */
 }
 
 .menu-button, .powerup-button {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 12px 25px;
-    margin: 10px;
-    border-radius: 5px;
+    padding: 14.4px 30px; /* 20% bigger padding */
+    margin: 12px; /* 20% bigger margin */
+    border-radius: 6px; /* 20% bigger border radius */
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 1.2em; /* 20% bigger font size */
     transition: background-color 0.3s ease, transform 0.1s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
@@ -60,8 +65,8 @@ canvas {
 }
 
 .about-container p {
-    margin: 10px 0;
-    font-size: 1.1em;
+    margin: 12px 0; /* 20% bigger margin */
+    font-size: 1.32em; /* 20% bigger font size */
     line-height: 1.6;
 }
 
@@ -73,7 +78,7 @@ canvas {
 .ui-element {
     position: absolute;
     color: #fff;
-    font-size: 1.2em;
+    font-size: 1.44em; /* 20% bigger font size */
     text-shadow: 1px 1px 2px #000;
 }
 
@@ -97,10 +102,10 @@ canvas {
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 300px;
-    height: 20px;
+    width: 360px; /* 20% bigger width */
+    height: 24px; /* 20% bigger height */
     background-color: #555;
-    border-radius: 5px;
+    border-radius: 6px; /* 20% bigger border radius */
     border: 1px solid #777;
 }
 
@@ -108,7 +113,7 @@ canvas {
     width: 0%;
     height: 100%;
     background-color: #00ffff;
-    border-radius: 5px;
+    border-radius: 6px; /* 20% bigger border radius */
     transition: width 0.3s ease;
 }
 
@@ -118,13 +123,13 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     color: #ffff00;
-    font-size: 2em;
+    font-size: 2.4em; /* 20% bigger font size */
     font-weight: bold;
     text-shadow: 2px 2px 4px #000;
     display: none; /* Escondido inicialmente */
-    padding: 20px;
+    padding: 24px; /* 20% bigger padding */
     background-color: rgba(0,0,0,0.7);
-    border-radius: 10px;
+    border-radius: 12px; /* 20% bigger border radius */
 }
 
 /* Sprite positioning for game entities */
@@ -141,4 +146,81 @@ body img[src*="sprites/"] {
 .menu-container, .about-container, .game-over-container, .level-up-container {
     z-index: 1000;
     position: relative;
+}
+
+/* Responsive design for different screen sizes */
+@media (max-width: 1300px) {
+    .menu-container, .about-container, .game-over-container, .level-up-container {
+        padding: 18px; /* 20% bigger than original 15px */
+        margin: 12px; /* 20% bigger than original 10px */
+    }
+    
+    .menu-button, .powerup-button {
+        padding: 12px 24px; /* 20% bigger than original 10px 20px */
+        font-size: 1.2em; /* 20% bigger than original 1em */
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 6px; /* 20% bigger than original 5px */
+    }
+    
+    canvas {
+        max-width: 98vw;
+        max-height: 80vh;
+        border-radius: 4.8px; /* 20% bigger than original 4px */
+    }
+    
+    .menu-container, .about-container, .game-over-container, .level-up-container {
+        padding: 12px; /* 20% bigger than original 10px */
+        margin: 6px; /* 20% bigger than original 5px */
+        width: 90%;
+        max-width: none;
+    }
+    
+    .menu-container h1, .about-container h1, .game-over-container h1, .level-up-container h1 {
+        font-size: 1.8em; /* 20% bigger than original 1.5em */
+        margin-bottom: 18px; /* 20% bigger than original 15px */
+    }
+    
+    .menu-button, .powerup-button {
+        padding: 9.6px 19.2px; /* 20% bigger than original 8px 16px */
+        font-size: 1.08em; /* 20% bigger than original 0.9em */
+        margin: 6px; /* 20% bigger than original 5px */
+    }
+    
+    .ui-element {
+        font-size: 16.8px !important; /* 20% bigger than original 14px */
+    }
+    
+    #messageDisplay {
+        font-size: 1.8em !important; /* 20% bigger than original 1.5em */
+        padding: 18px !important; /* 20% bigger than original 15px */
+    }
+}
+
+@media (max-width: 480px) {
+    canvas {
+        max-height: 75vh;
+        border-radius: 2.4px; /* 20% bigger than original 2px */
+    }
+    
+    .menu-container h1, .about-container h1, .game-over-container h1, .level-up-container h1 {
+        font-size: 1.56em; /* 20% bigger than original 1.3em */
+    }
+    
+    .menu-button, .powerup-button {
+        padding: 7.2px 14.4px; /* 20% bigger than original 6px 12px */
+        font-size: 0.96em; /* 20% bigger than original 0.8em */
+    }
+    
+    .ui-element {
+        font-size: 14.4px !important; /* 20% bigger than original 12px */
+    }
+    
+    #messageDisplay {
+        font-size: 1.44em !important; /* 20% bigger than original 1.2em */
+        padding: 12px !important; /* 20% bigger than original 10px */
+    }
 }

@@ -2,7 +2,7 @@
 
 class ExperienceOrb extends Entity {
     constructor(x, y, value) {
-        super(x, y, 5, '#00FF00');
+        super(x, y, 6, '#00FF00'); // 20% bigger radius
         this.value = value;
         this.collectionSpeed = 300;
         this.collectionRadius = 80;
@@ -27,7 +27,7 @@ class ExperienceOrb extends Entity {
 
 class HealthOrb extends Entity {
     constructor(x, y) {
-        super(x, y, 8, '#FFC0CB');
+        super(x, y, 9.6, '#FFC0CB'); // 20% bigger radius
         this.healAmount = 25;
     }
 

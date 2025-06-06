@@ -1,7 +1,7 @@
 // Player class - main character controlled by the user
 class Player extends Entity {
     constructor(x, y) {
-        super(x, y, 15, '#00FFFF', 'sprites/player.webp'); // Ciano with player sprite
+        super(x, y, 18, '#00FFFF', 'sprites/player.webp'); // Ciano with player sprite - 20% bigger
         this.speed = 250; // pixels por segundo
         this.keys = {}; // Para armazenar o estado das teclas pressionadas
         this.health = 100;
@@ -15,7 +15,7 @@ class Player extends Entity {
         this.projectiles = [];
         this.projectileSpeed = 400;
         this.projectileDamage = 10;
-        this.projectileSize = 5;
+        this.projectileSize = 6; // 20% bigger projectiles
         this.projectilePierce = 0;
         this.numProjectiles = 1;
         this.projectileSpread = 0.1;
@@ -23,7 +23,7 @@ class Player extends Entity {
         this.invulnerableTimer = 0;
         
         // Player sprite should be a bit larger
-        this.spriteSize = 30;
+        this.spriteSize = 36; // 20% bigger sprite
     }
 
     handleInput(dt) {
@@ -112,11 +112,11 @@ class Player extends Entity {
         super.draw(ctx);
         this.projectiles.forEach(p => p.draw(ctx));
 
-        // Health bar
+        // Health bar - 20% bigger
         ctx.fillStyle = 'grey';
-        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 10, this.radius * 2, 5);
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2, 6); // 20% bigger height and offset
         ctx.fillStyle = 'green';
-        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 10, this.radius * 2 * (this.health / this.maxHealth), 5);
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2 * (this.health / this.maxHealth), 6); // 20% bigger
     }
 
     takeDamage(amount) {

@@ -22,7 +22,9 @@ Usa corretamente os vetores DONE
     Usa para posicionamento de tudo q se mexe
 Faz uso de números aleatórios DONE
     Usa para o spawn de inimigos, opções no level up, drop dos orbs e quando so inimigos atiram 
-Utiliza bem assets (imagens, animações e sons)
+Utiliza bem assets (imagens, animações e sons) DONE
+    Assests para o player inimigos e boss
 Utiliza rotações de imagens ou outras transformações de maneira consistente
+    As entidades se movimentam com as imagens sem problema
 O game está organizado em classes
     Tem classe pra krl (Vector2D, Entity, UIManager, etc...)
