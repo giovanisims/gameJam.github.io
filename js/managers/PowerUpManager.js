@@ -24,18 +24,49 @@ class PowerUpManager {
         const optionsContainer = document.getElementById('powerUpOptions');
         optionsContainer.innerHTML = '';
 
-        options.forEach(powerUp => {
+        options.forEach((powerUp, index) => {
             const button = document.createElement('button');
             button.classList.add('powerup-button');
+            button.setAttribute('id', `powerup-${index}`);
             button.innerHTML = `<strong>${powerUp.name}</strong><br><small>${powerUp.description}</small>`;
+            
+            // Add keyboard handlers for improved accessibility
+            button.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.selectPowerUp(powerUp);
+                }
+            });
+            
             button.onclick = () => {
-                game.player.applyPowerUp(powerUp);
-                this.chosenPowerUps.push(powerUp.name);
-                document.getElementById('levelUpScreen').style.display = 'none';
-                game.resumeGame();
+                this.selectPowerUp(powerUp);
             };
+            
             optionsContainer.appendChild(button);
         });
+        
         document.getElementById('levelUpScreen').style.display = 'flex';
+    }
+    
+    selectPowerUp(powerUp) {
+        // Add selection effect before applying
+        const buttons = document.querySelectorAll('.powerup-button');
+        buttons.forEach(btn => btn.disabled = true);
+        
+        // Add visual feedback for selection
+        event.currentTarget.style.transform = 'scale(1.1)';
+        event.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.8)';
+        
+        // Apply the power-up after a brief delay for visual feedback
+        setTimeout(() => {
+            game.player.applyPowerUp(powerUp);
+            this.chosenPowerUps.push(powerUp.name);
+            
+            // Hide screen and restore body scroll
+            document.getElementById('levelUpScreen').style.display = 'none';
+            document.body.style.overflow = '';
+            
+            game.resumeGame();
+        }, 400);
     }
 }
