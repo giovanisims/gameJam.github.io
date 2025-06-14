@@ -25,7 +25,7 @@ body::before {
     width: 100%;
     height: 100%;
     background: radial-gradient(circle at 30% 30%, rgba(30, 0, 50, 0.15), transparent 70%),
-                radial-gradient(circle at 70% 70%, rgba(0, 20, 50, 0.15), transparent 70%);
+        radial-gradient(circle at 70% 70%, rgba(0, 20, 50, 0.15), transparent 70%);
     pointer-events: none;
     z-index: -1;
 }
@@ -42,7 +42,10 @@ canvas {
     height: auto;
 }
 
-.menu-container, .about-container, .game-over-container, .level-up-container {
+.menu-container,
+.about-container,
+.game-over-container,
+.level-up-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,7 +63,10 @@ canvas {
     min-width: 500px;
 }
 
-.menu-container h1, .about-container h1, .game-over-container h1, .level-up-container h1 {
+.menu-container h1,
+.about-container h1,
+.game-over-container h1,
+.level-up-container h1 {
     color: #aa0000;
     margin-bottom: 24px;
     font-size: 50px;
@@ -77,11 +83,13 @@ canvas {
     font-display: swap;
 }
 
-.menu-container h1, #messageDisplay {
+.menu-container h1,
+#messageDisplay {
     font-family: 'Pixelify Sans', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
 }
 
-.menu-button, .powerup-button {
+.menu-button,
+.powerup-button {
     background: linear-gradient(to bottom, #aa0000, #660000);
     color: #e0faff;
     border: none;
@@ -97,13 +105,15 @@ canvas {
     min-width: 300px;
 }
 
-.menu-button:hover, .powerup-button:hover {
+.menu-button:hover,
+.powerup-button:hover {
     background: linear-gradient(to bottom, #D4AF37, #8B6914);
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), 0 0 8px rgba(218, 165, 32, 0.6);
 }
 
-.menu-button:active, .powerup-button:active {
+.menu-button:active,
+.powerup-button:active {
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -139,22 +149,22 @@ canvas {
     letter-spacing: 0.5px;
 }
 
-#scoreDisplay { 
-    top: 10px; 
+#scoreDisplay {
+    top: 10px;
     left: 10px;
     color: #ffd700;
     font-weight: 500;
 }
 
-#levelDisplay { 
-    top: 10px; 
+#levelDisplay {
+    top: 10px;
     right: 10px;
     color: #80aaff;
     font-weight: 500;
 }
 
-#livesDisplay { 
-    top: 70px; 
+#livesDisplay {
+    top: 70px;
     left: 10px;
     color: #ff66aa;
     font-weight: 500;
@@ -231,12 +241,20 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 @keyframes bossGlow {
-    from { filter: drop-shadow(0 0 8px rgba(255, 50, 200, 0.6)); }
-    to { filter: drop-shadow(0 0 16px rgba(255, 50, 200, 0.8)); }
+    from {
+        filter: drop-shadow(0 0 8px rgba(255, 50, 200, 0.6));
+    }
+
+    to {
+        filter: drop-shadow(0 0 16px rgba(255, 50, 200, 0.8));
+    }
 }
 
 /* Ensure all UI menus are above sprites */
-.menu-container, .about-container, .game-over-container, .level-up-container {
+.menu-container,
+.about-container,
+.game-over-container,
+.level-up-container {
     z-index: 1000;
     position: relative;
     animation: fadeIn 0.5s ease-out;
@@ -244,19 +262,39 @@ body img[src*="sprites/melee_enemy.webp"] {
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes glow {
-    from { box-shadow: 0 0 10px rgba(255, 234, 0, 0.3); }
-    to { box-shadow: 0 0 20px rgba(255, 234, 0, 0.6); }
+    from {
+        box-shadow: 0 0 10px rgba(255, 234, 0, 0.3);
+    }
+
+    to {
+        box-shadow: 0 0 20px rgba(255, 234, 0, 0.6);
+    }
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 @keyframes fadeInScale {
@@ -264,6 +302,7 @@ body img[src*="sprites/melee_enemy.webp"] {
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -275,6 +314,7 @@ body img[src*="sprites/melee_enemy.webp"] {
         opacity: 1;
         transform: scale(1);
     }
+
     to {
         opacity: 0;
         transform: scale(0.95);
@@ -283,23 +323,50 @@ body img[src*="sprites/melee_enemy.webp"] {
 
 /* Entity appearance animations */
 @keyframes spawnIn {
-    0% { transform: scale(0); opacity: 0; }
-    70% { transform: scale(1.2); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* XP and Health orb hover effects */
 @keyframes orbFloat {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0); }
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
 
 /* Add a subtle pulsing effect to game elements */
 @keyframes subtlePulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Style for high score display */
@@ -367,9 +434,18 @@ body img[src*="sprites/melee_enemy.webp"] {
 
 /* Visual feedback when gaining score */
 @keyframes scoreFlash {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); color: #ffea00; }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+        color: #ffea00;
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .score-flash {
@@ -383,7 +459,8 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 /* Custom button focus styles for accessibility */
-.menu-button:focus, .powerup-button:focus {
+.menu-button:focus,
+.powerup-button:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(128, 170, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3);
 }
@@ -401,8 +478,13 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 @keyframes titleGlow {
-    from { text-shadow: 0 0 15px rgba(170, 0, 0, 0.5); }
-    to { text-shadow: 0 0 5px rgba(255, 215, 0, 0.8); }
+    from {
+        text-shadow: 0 0 15px rgba(170, 0, 0, 0.5);
+    }
+
+    to {
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+    }
 }
 
 /* Better game over screen */
@@ -459,14 +541,30 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 @keyframes levelUpAppear {
-    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    70% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    70% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 @keyframes levelUpPulse {
-    from { transform: scale(1); }
-    to { transform: scale(1.05); }
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+    }
 }
 
 /* Improved UI element positioning and visibility */
@@ -514,6 +612,7 @@ body img[src*="sprites/melee_enemy.webp"] {
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -525,6 +624,7 @@ body img[src*="sprites/melee_enemy.webp"] {
         opacity: 1;
         transform: scale(1);
     }
+
     to {
         opacity: 0;
         transform: scale(0.95);
@@ -541,9 +641,11 @@ body img[src*="sprites/melee_enemy.webp"] {
     0% {
         background-position: 0% 50%;
     }
+
     50% {
         background-position: 100% 50%;
     }
+
     100% {
         background-position: 0% 50%;
     }
@@ -560,26 +662,26 @@ body {
         width: 90%;
         padding: 20px;
     }
-    
+
     .level-up-container h1 {
         font-size: 1.8em;
     }
-    
+
     .level-up-container p {
         font-size: 1.2em;
         margin-bottom: 15px;
     }
-    
+
     .powerup-button {
         padding: 15px 20px;
         min-width: auto;
         width: 100%;
     }
-    
+
     .powerup-button strong {
         font-size: 1.2em;
     }
-    
+
     .powerup-button small {
         font-size: 0.9em;
     }
@@ -590,62 +692,71 @@ body {
     gap: 30px;
 }
 
-/* Centraliza os botões de power up em grid 2x2, mantendo simetria */
-        #powerUpOptions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 32px;
-            justify-items: center;
-            align-items: center;
-            margin-top: 32px;
-            margin-bottom: 16px;
-            min-width: 400px;
-        }
-        .powerup-button {
-            min-width: 220px;
-            min-height: 90px;
-            font-size: 1.5em;
-            background: #07206a;
-            color: #e0e0e0;
-            border: 2px solid #00ffff;
-            border-radius: 12px;
-            box-shadow: 0 0 16px #00ffff33;
-            margin: 0;
-            transition: transform 0.1s, box-shadow 0.1s;
-            text-align: center;
-        }
-        .powerup-button:focus {
-            outline: 2px solid #fff;
-            box-shadow: 0 0 24px #00ffffcc;
-        }
-        
-        /* Estilo para power-ups lendários */
-        .legendary-powerup {
-            background: linear-gradient(135deg, #8B4513, #DAA520) !important;
-            border: 2px solid #FFD700 !important;
-            box-shadow: 0 0 20px #FFD70050 !important;
-            color: #FFF !important;
-        }
-        
-        .legendary-powerup:hover {
-            box-shadow: 0 0 30px #FFD700AA !important;
-            transform: scale(1.05) !important;
-        }
-        
-        /* Estilo para botões de substituição */
-        .replace-button {
-            background: linear-gradient(135deg, #8B1538, #DA2020) !important;
-            border: 2px solid #FF4444 !important;
-            box-shadow: 0 0 20px #FF444450 !important;
-        }
-        
-        .replace-button:hover {
-            box-shadow: 0 0 30px #FF4444AA !important;
-        }
-        
-        @media (max-width: 600px) {
-            #powerUpOptions {
-                grid-template-columns: 1fr;
-                min-width: unset;
-            }
-        }
+#powerUpOptions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 32px;
+    justify-items: center;
+    align-items: center;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    min-width: 1000px;
+}
+
+.powerup-button {
+    min-width: 220px;
+    min-height: 250px;
+    font-size: 1.5em;
+    background: #07206a;
+    color: #e0e0e0;
+    border: 2px solid #00ffff;
+    border-radius: 12px;
+    box-shadow: 0 0 16px #00ffff33;
+    margin: 0;
+    transition: transform 0.1s, box-shadow 0.1s;
+    text-align: center;
+}
+
+.powerup-button:focus {
+    outline: 2px solid #fff;
+    box-shadow: 0 0 24px #00ffffcc;
+}
+
+.powerup-button strong {
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 5px;
+}
+
+/* Estilo para power-ups lendários */
+.legendary-powerup {
+    background: linear-gradient(135deg, #8B4513, #DAA520) !important;
+    border: 2px solid #FFD700 !important;
+    box-shadow: 0 0 20px #FFD70050 !important;
+    color: #FFF !important;
+}
+
+.legendary-powerup:hover {
+    box-shadow: 0 0 30px #FFD700AA !important;
+    transform: scale(1.05) !important;
+}
+
+/* Estilo para botões de substituição */
+.replace-button {
+    background: linear-gradient(135deg, #8B1538, #DA2020) !important;
+    border: 2px solid #FF4444 !important;
+    box-shadow: 0 0 20px #FF444450 !important;
+}
+
+.replace-button:hover {
+    box-shadow: 0 0 30px #FF4444AA !important;
+}
+
+@media (max-width: 600px) {
+    #powerUpOptions {
+        grid-template-columns: 1fr;
+        min-width: unset;
+    }
+}
