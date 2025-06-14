@@ -45,7 +45,24 @@ class Enemy extends Entity {
 
     takeDamage(amount) {
         this.health -= amount;
+        
+        // Vampirismo - jogador se cura baseado no dano causado
+        if (game.player.hasVampirism) {
+            const healAmount = Math.floor(amount * game.player.vampirismRate);
+            game.player.health = Math.min(game.player.maxHealth, game.player.health + healAmount);
+            game.uiManager.updatePlayerHealth();
+        }
+        
         if (this.health <= 0) {
+            // Lightning Storm trigger
+            if (game.player.hasLightningStorm) {
+                game.player.lightningKillCount++;
+                if (game.player.lightningKillCount >= game.player.lightningThreshold) {
+                    game.triggerLightningStorm();
+                    game.player.lightningKillCount = 0;
+                }
+            }
+            
             this.destroy(); // Clean up sprite element
             game.player.addXP(this.xpValue);
             game.score += this.xpValue * 10;
@@ -214,7 +231,24 @@ class BossEnemy extends Enemy {
     
     takeDamage(amount) {
         this.health -= amount;
+        
+        // Vampirismo - jogador se cura baseado no dano causado
+        if (game.player.hasVampirism) {
+            const healAmount = Math.floor(amount * game.player.vampirismRate);
+            game.player.health = Math.min(game.player.maxHealth, game.player.health + healAmount);
+            game.uiManager.updatePlayerHealth();
+        }
+        
         if (this.health <= 0) {
+            // Lightning Storm trigger
+            if (game.player.hasLightningStorm) {
+                game.player.lightningKillCount++;
+                if (game.player.lightningKillCount >= game.player.lightningThreshold) {
+                    game.triggerLightningStorm();
+                    game.player.lightningKillCount = 0;
+                }
+            }
+            
             this.destroy(); // Clean up sprite element
             game.player.addXP(this.xpValue);
             game.score += this.xpValue * 10;

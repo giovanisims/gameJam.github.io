@@ -117,6 +117,9 @@ class Game {
         this.enemyProjectiles = [];
         this.xpOrbs = [];
         this.healthOrbs = [];
+        this.fireTrails = []; // Initialize fire trails
+        this.lightningEffects = []; // Initialize lightning effects
+        this.overloadEffects = []; // Initialize overload effects
         this.score = 0;
         this.gameTime = 0;
         this.enemySpawnTimer = 0;
@@ -137,6 +140,8 @@ class Game {
         
         ExperienceOrb.prototype.collectionRadius = 80;
         this.powerUpManager.chosenPowerUps = [];
+        this.powerUpManager.chosenLegendaryPowerUps = []; // Reset legendary power-ups
+        this.powerUpManager.activeLegendaryPowerUps = []; // Reset active legendary power-ups
 
         this.uiManager.updateScore(this.score);
         this.uiManager.updateLevel(this.player.level);
@@ -269,6 +274,94 @@ class Game {
         this.uiManager.showMessage(`BOSS NÍVEL ${this.player.level} APARECEU!`, 4);
     }
 
+    // Novo método para criar efeito visual de explosão
+    createExplosionEffect(x, y, radius) {
+        // Cria um efeito visual temporário de explosão
+        const explosionEffect = {
+            x: x,
+            y: y,
+            radius: radius,
+            maxRadius: radius,
+            alpha: 1.0,
+            duration: 0.3,
+            timeLeft: 0.3
+        };
+        
+        // Adiciona à lista de efeitos (crie se não existir)
+        if (!this.explosionEffects) {
+            this.explosionEffects = [];
+        }
+        this.explosionEffects.push(explosionEffect);
+    }
+
+    // Lightning Storm system
+    triggerLightningStorm() {
+        const activeEnemies = this.enemies.filter(e => e.active);
+        if (activeEnemies.length === 0) return;
+        
+        const targetEnemy = activeEnemies[Math.floor(Math.random() * activeEnemies.length)];
+        this.createLightningEffect(targetEnemy.position.x, targetEnemy.position.y);
+        
+        // Primary lightning damage
+        targetEnemy.takeDamage(this.player.lightningDamage);
+        
+        // Chain lightning to nearby enemies
+        activeEnemies.forEach(enemy => {
+            if (enemy === targetEnemy) return;
+            const distance = targetEnemy.position.distance(enemy.position);
+            if (distance <= this.player.lightningChainRange) {
+                this.createLightningChain(targetEnemy.position, enemy.position);
+                enemy.takeDamage(this.player.lightningDamage * 0.7);
+            }
+        });
+        
+        this.uiManager.showMessage("⚡ TEMPESTADE DE RAIO! ⚡", 2);
+    }
+
+    createLightningEffect(x, y) {
+        const effect = {
+            x, y,
+            duration: 0.3,
+            timeLeft: 0.3,
+            alpha: 1.0
+        };
+        this.lightningEffects.push(effect);
+    }
+
+    createLightningChain(fromPos, toPos) {
+        const effect = {
+            from: fromPos,
+            to: toPos,
+            duration: 0.2,
+            timeLeft: 0.2,
+            alpha: 1.0
+        };
+        this.lightningEffects.push(effect);
+    }
+
+    // Fire Trail system
+    addFireTrail(x, y) {
+        const trail = {
+            x, y,
+            radius: 25,
+            damage: this.player.fireTrailDamage,
+            duration: 2.0,
+            timeLeft: 2.0,
+            alpha: 1.0
+        };
+        this.fireTrails.push(trail);
+    }
+
+    // Neural Overload effect
+    createOverloadEffect() {
+        const effect = {
+            duration: this.player.overloadDuration,
+            timeLeft: this.player.overloadDuration,
+            intensity: 1.0
+        };
+        this.overloadEffects.push(effect);
+    }
+
     update(dt) {
         if (this.isPaused || this.gameState !== 'playing') return;
 
@@ -327,6 +420,52 @@ class Game {
             }
         });
 
+        // Atualiza efeitos de explosão
+        if (this.explosionEffects) {
+            this.explosionEffects.forEach(effect => {
+                effect.timeLeft -= dt;
+                effect.alpha = effect.timeLeft / effect.duration;
+                effect.radius = effect.maxRadius * (1 - effect.alpha) * 0.5 + effect.maxRadius * 0.5;
+            });
+            this.explosionEffects = this.explosionEffects.filter(effect => effect.timeLeft > 0);
+        }
+
+        // Update fire trails
+        if (this.fireTrails) {
+            this.fireTrails.forEach(trail => {
+                trail.timeLeft -= dt;
+                trail.alpha = trail.timeLeft / trail.duration;
+                
+                // Damage enemies in fire trail
+                this.enemies.forEach(enemy => {
+                    if (!enemy.active) return;
+                    const distance = Math.sqrt((enemy.position.x - trail.x) ** 2 + (enemy.position.y - trail.y) ** 2);
+                    if (distance <= trail.radius) {
+                        enemy.takeDamage(trail.damage * dt);
+                    }
+                });
+            });
+            this.fireTrails = this.fireTrails.filter(trail => trail.timeLeft > 0);
+        }
+
+        // Update lightning effects
+        if (this.lightningEffects) {
+            this.lightningEffects.forEach(effect => {
+                effect.timeLeft -= dt;
+                effect.alpha = effect.timeLeft / effect.duration;
+            });
+            this.lightningEffects = this.lightningEffects.filter(effect => effect.timeLeft > 0);
+        }
+
+        // Update overload effects
+        if (this.overloadEffects) {
+            this.overloadEffects.forEach(effect => {
+                effect.timeLeft -= dt;
+                effect.intensity = effect.timeLeft / effect.duration;
+            });
+            this.overloadEffects = this.overloadEffects.filter(effect => effect.timeLeft > 0);
+        }
+
         this.enemies = this.enemies.filter(e => e.active);
         this.player.projectiles = this.player.projectiles.filter(p => p.active);
         this.enemyProjectiles = this.enemyProjectiles.filter(ep => ep.active);
@@ -346,11 +485,96 @@ class Game {
         this.ctx.fillStyle = '#080818';
         this.ctx.fillRect(0, 0, this.width, this.height);
 
+        // Draw fire trails
+        if (this.fireTrails) {
+            this.fireTrails.forEach(trail => {
+                this.ctx.save();
+                this.ctx.globalAlpha = trail.alpha;
+                
+                // Outer fire
+                this.ctx.fillStyle = '#FF4500';
+                this.ctx.beginPath();
+                this.ctx.arc(trail.x, trail.y, trail.radius, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // Inner fire
+                this.ctx.fillStyle = '#FFD700';
+                this.ctx.beginPath();
+                this.ctx.arc(trail.x, trail.y, trail.radius * 0.6, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                this.ctx.restore();
+            });
+        }
+
         this.player.draw(this.ctx);
         this.enemies.forEach(enemy => enemy.draw(this.ctx));
         this.enemyProjectiles.forEach(ep => ep.draw(this.ctx));
         this.xpOrbs.forEach(orb => orb.draw(this.ctx));
         this.healthOrbs.forEach(orb => orb.draw(this.ctx));
+        
+        // Draw lightning effects
+        if (this.lightningEffects) {
+            this.lightningEffects.forEach(effect => {
+                this.ctx.save();
+                this.ctx.globalAlpha = effect.alpha;
+                this.ctx.strokeStyle = '#FFFFFF';
+                this.ctx.lineWidth = 4;
+                this.ctx.shadowColor = '#00FFFF';
+                this.ctx.shadowBlur = 15;
+                
+                if (effect.from && effect.to) {
+                    // Chain lightning
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(effect.from.x, effect.from.y);
+                    this.ctx.lineTo(effect.to.x, effect.to.y);
+                    this.ctx.stroke();
+                } else {
+                    // Main lightning bolt
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(effect.x, 0);
+                    this.ctx.lineTo(effect.x, effect.y);
+                    this.ctx.stroke();
+                    
+                    // Lightning circle
+                    this.ctx.strokeStyle = '#00FFFF';
+                    this.ctx.lineWidth = 2;
+                    this.ctx.beginPath();
+                    this.ctx.arc(effect.x, effect.y, 40, 0, Math.PI * 2);
+                    this.ctx.stroke();
+                }
+                this.ctx.restore();
+            });
+        }
+        
+        // Neural Overload screen effect
+        if (this.overloadEffects && this.overloadEffects.length > 0) {
+            this.ctx.save();
+            this.ctx.globalAlpha = 0.1 + 0.05 * Math.sin(Date.now() * 0.02);
+            this.ctx.fillStyle = '#00FFFF';
+            this.ctx.fillRect(0, 0, this.width, this.height);
+            this.ctx.restore();
+        }
+        
+        // Desenha efeitos de explosão
+        if (this.explosionEffects) {
+            this.explosionEffects.forEach(effect => {
+                this.ctx.save();
+                this.ctx.globalAlpha = effect.alpha;
+                this.ctx.strokeStyle = '#FF4500';
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.arc(effect.x, effect.y, effect.radius, 0, Math.PI * 2);
+                this.ctx.stroke();
+                
+                this.ctx.strokeStyle = '#FFD700';
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                this.ctx.arc(effect.x, effect.y, effect.radius * 0.7, 0, Math.PI * 2);
+                this.ctx.stroke();
+                this.ctx.restore();
+            });
+        }
     }
 
     gameLoop(timestamp) {

@@ -24,6 +24,25 @@ class Player extends Entity {
         
         // Player sprite should be a bit larger
         this.spriteSize = 36; // 20% bigger sprite
+
+        // Neural Overload variables
+        this.hasNeuralOverload = false;
+        this.isOverloadActive = false;
+        this.overloadTimer = 0;
+        this.overloadCooldown = 5; // Cooldown for neural overload
+        this.overloadDuration = 3; // Duration of neural overload
+
+        // Fire Trail variables
+        this.hasFireTrail = false;
+        this.fireTrailTimer = 0;
+        this.fireTrailInterval = 0.1; // Interval between fire trail effects
+
+        // Cyclone Axe variables
+        this.hasCycloneAxe = false;
+        this.cycloneAngle = 0;
+        this.cycloneSpeed = 2 * Math.PI; // Full rotation in 1 second
+        this.cycloneRadius = 30;
+        this.cycloneDamage = 5;
     }
 
     handleInput(dt) {
@@ -45,18 +64,24 @@ class Player extends Entity {
     shoot(targetPosition) {
         if (this.shootTimer <= 0) {
             const baseAngle = targetPosition.subtract(this.position).angle();
+            let shotsToFire = this.numProjectiles;
+            
+            // Neural Overload duplica os tiros
+            if (this.isOverloadActive) {
+                shotsToFire *= 2;
+            }
 
-            for (let i = 0; i < this.numProjectiles; i++) {
+            for (let i = 0; i < shotsToFire; i++) {
                 let currentAngle = baseAngle;
-                if (this.numProjectiles > 1) {
-                    currentAngle += (i - (this.numProjectiles - 1) / 2) * this.projectileSpread;
+                if (shotsToFire > 1) {
+                    currentAngle += (i - (shotsToFire - 1) / 2) * this.projectileSpread;
                 }
                 const velocity = Vector2D.fromAngle(currentAngle, this.projectileSpeed);
                 const projectile = new Projectile(
                     this.position.x,
                     this.position.y,
                     this.projectileSize,
-                    '#FFFF00',
+                    this.isOverloadActive ? '#00FFFF' : '#FFFF00', // Cor diferente durante overload
                     velocity,
                     this.projectileDamage,
                     this.projectilePierce
@@ -80,6 +105,46 @@ class Player extends Entity {
 
         if (this.invulnerableTimer > 0) {
             this.invulnerableTimer -= dt;
+        }
+
+        // Neural Overload logic
+        if (this.hasNeuralOverload) {
+            this.overloadTimer += dt;
+            if (!this.isOverloadActive && this.overloadTimer >= this.overloadCooldown) {
+                this.isOverloadActive = true;
+                this.overloadTimer = 0;
+                game.uiManager.showMessage("OVERLOAD NEURAL ATIVO!", 2);
+                game.createOverloadEffect();
+            } else if (this.isOverloadActive && this.overloadTimer >= this.overloadDuration) {
+                this.isOverloadActive = false;
+                this.overloadTimer = 0;
+            }
+        }
+
+        // Fire Trail logic
+        if (this.hasFireTrail) {
+            this.fireTrailTimer += dt;
+            if (this.fireTrailTimer >= this.fireTrailInterval) {
+                game.addFireTrail(this.position.x, this.position.y);
+                this.fireTrailTimer = 0;
+            }
+        }
+
+        // Cyclone Axe logic
+        if (this.hasCycloneAxe) {
+            this.cycloneAngle += this.cycloneSpeed * dt;
+            if (this.cycloneAngle >= Math.PI * 2) {
+                this.cycloneAngle = 0;
+            }
+            
+            // Check cyclone damage to enemies
+            enemies.forEach(enemy => {
+                if (!enemy.active) return;
+                const distance = this.position.distance(enemy.position);
+                if (distance <= this.cycloneRadius) {
+                    enemy.takeDamage(this.cycloneDamage * dt); // Damage over time
+                }
+            });
         }
 
         this.projectiles = this.projectiles.filter(p => p.active);
@@ -109,14 +174,49 @@ class Player extends Entity {
                 return;
             }
         }
+        
+        // Draw cyclone axe
+        if (this.hasCycloneAxe) {
+            ctx.save();
+            ctx.translate(this.position.x, this.position.y);
+            ctx.rotate(this.cycloneAngle);
+            
+            // Draw spinning axe effect
+            ctx.strokeStyle = '#FF0000';
+            ctx.lineWidth = 4;
+            ctx.shadowColor = '#FF0000';
+            ctx.shadowBlur = 10;
+            
+            ctx.beginPath();
+            ctx.moveTo(-this.cycloneRadius, 0);
+            ctx.lineTo(this.cycloneRadius, 0);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(0, -this.cycloneRadius);
+            ctx.lineTo(0, this.cycloneRadius);
+            ctx.stroke();
+            
+            ctx.restore();
+        }
+        
         super.draw(ctx);
         this.projectiles.forEach(p => p.draw(ctx));
 
         // Health bar - 20% bigger
         ctx.fillStyle = 'grey';
-        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2, 6); // 20% bigger height and offset
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2, 6);
         ctx.fillStyle = 'green';
-        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2 * (this.health / this.maxHealth), 6); // 20% bigger
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2 * (this.health / this.maxHealth), 6);
+        
+        // Neural Overload screen effect
+        if (this.isOverloadActive) {
+            ctx.save();
+            ctx.globalAlpha = 0.1 + 0.1 * Math.sin(Date.now() * 0.01);
+            ctx.fillStyle = '#00FFFF';
+            ctx.fillRect(this.position.x - 50, this.position.y - 50, 100, 100);
+            ctx.restore();
+        }
     }
 
     takeDamage(amount) {
