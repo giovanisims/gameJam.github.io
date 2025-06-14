@@ -103,6 +103,14 @@ class Game {
     }
 
     resetGame() {
+        // Clean up all sprite elements first
+        const allSprites = document.querySelectorAll('img[src*="sprites/"]');
+        allSprites.forEach(sprite => {
+            if (sprite.parentNode) {
+                sprite.parentNode.removeChild(sprite);
+            }
+        });
+        
         // Clean up existing entities before creating new ones
         if (this.player) {
             this.player.destroy();
@@ -209,6 +217,27 @@ class Game {
             case 1: x = this.width + 30; y = Math.random() * this.height; break;
             case 2: x = Math.random() * this.width; y = this.height + 30; break;
             case 3: x = -30; y = Math.random() * this.height; break;
+        }
+
+        // Ensure enemies are not spawned in the center of the screen
+        const centerBuffer = 50;
+        const isTooCloseToCenter = 
+            Math.abs(x - this.width/2) < centerBuffer && 
+            Math.abs(y - this.height/2) < centerBuffer;
+            
+        if (isTooCloseToCenter) {
+            // Adjust position away from center
+            if (x > this.width/2) {
+                x += centerBuffer;
+            } else {
+                x -= centerBuffer;
+            }
+            
+            if (y > this.height/2) {
+                y += centerBuffer;
+            } else {
+                y -= centerBuffer;
+            }
         }
 
         const enemyType = Math.random();

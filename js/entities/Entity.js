@@ -18,6 +18,11 @@ class Entity {
     }
 
     loadSprite(spritePath) {
+        // Clean up any existing sprite first to avoid duplicates
+        if (this.spriteElement && this.spriteElement.parentNode) {
+            this.spriteElement.parentNode.removeChild(this.spriteElement);
+        }
+        
         // Create HTML img element for animated sprites
         this.spriteElement = document.createElement('img');
         this.spriteElement.src = spritePath;
@@ -27,21 +32,18 @@ class Entity {
         this.spriteElement.style.pointerEvents = 'none'; // Don't interfere with game clicks
         this.spriteElement.style.zIndex = '10'; // Above canvas but below UI
         this.spriteElement.style.imageRendering = 'pixelated'; // For pixel art sprites
+        this.spriteElement.style.display = 'none'; // Start hidden until properly positioned
         
         this.spriteElement.onload = () => {
             this.spriteLoaded = true;
-            console.log(`✅ Sprite loaded successfully: ${spritePath}`);
         };
         
         this.spriteElement.onerror = () => {
-            console.error(`❌ Failed to load sprite: ${spritePath}`);
             this.spriteLoaded = false;
         };
         
         // Add to DOM
         document.body.appendChild(this.spriteElement);
-        
-        console.log(`🔄 Loading sprite: ${spritePath}`);
     }
 
     update(dt) {
@@ -51,6 +53,8 @@ class Entity {
         if (this.spriteElement && this.spriteLoaded) {
             // Get canvas offset to position sprite correctly
             const canvas = document.getElementById('gameCanvas');
+            if (!canvas) return; // Safety check
+            
             const canvasRect = canvas.getBoundingClientRect();
             
             // Check if entity is within canvas boundaries (with small buffer for smooth transitions)
@@ -60,13 +64,28 @@ class Entity {
                 this.position.x <= canvas.width + buffer &&
                 this.position.y >= -buffer && 
                 this.position.y <= canvas.height + buffer;
+                
+            // Position sprite - calculate position only once
+            const leftPos = (canvasRect.left + this.position.x - this.spriteSize / 2) + 'px';
+            const topPos = (canvasRect.top + this.position.y - this.spriteSize / 2) + 'px';
             
-            // Position sprite
-            this.spriteElement.style.left = (canvasRect.left + this.position.x - this.spriteSize / 2) + 'px';
-            this.spriteElement.style.top = (canvasRect.top + this.position.y - this.spriteSize / 2) + 'px';
+            // Only update position if necessary
+            if (this.spriteElement.style.left !== leftPos) {
+                this.spriteElement.style.left = leftPos;
+            }
             
-            // Hide sprite if entity is outside canvas boundaries or inactive
-            this.spriteElement.style.display = (this.active && isWithinCanvas) ? 'block' : 'none';
+            if (this.spriteElement.style.top !== topPos) {
+                this.spriteElement.style.top = topPos;
+            }
+            
+            // Handle visibility - check if we need to change the display value
+            if (!this.active || !isWithinCanvas) {
+                if (this.spriteElement.style.display !== 'none') {
+                    this.spriteElement.style.display = 'none';
+                }
+            } else if (this.spriteElement.style.display !== 'block') {
+                this.spriteElement.style.display = 'block';
+            }
         }
     }
 
