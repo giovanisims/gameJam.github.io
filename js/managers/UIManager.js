@@ -116,7 +116,17 @@ class UIManager {
             this.game.hideAllSprites();
         }
         
-        this.levelUpScreen.style.display = 'flex';
+        // Add a brief delay for better transition experience
+        setTimeout(() => {
+            this.levelUpScreen.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+            
+            // Apply focus to the first upgrade button after a slight delay
+            setTimeout(() => {
+                const firstButton = document.querySelector('#powerUpOptions .powerup-button');
+                if (firstButton) firstButton.focus();
+            }, 300);
+        }, 200);
     }
 
     hideGameUI() {
