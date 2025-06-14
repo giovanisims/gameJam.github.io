@@ -2,14 +2,14 @@
 class PowerUpManager {
     constructor() {
         this.availablePowerUps = [
-            { name: "Velocidade de Tiro +", description: "Aumenta a cadência de tiro.", apply: (player) => { player.shootCooldown = Math.max(0.1, player.shootCooldown * 0.85); } },
-            { name: "Dano do Projétil +", description: "Aumenta o dano dos seus projéteis.", apply: (player) => { player.projectileDamage += 5; } },
-            { name: "Velocidade de Movimento +", description: "Aumenta sua velocidade de movimento.", apply: (player) => { player.speed += 30; } },
-            { name: "Vida Máxima +", description: "Aumenta sua vida máxima.", apply: (player) => { player.maxHealth += 20; game.uiManager.updatePlayerHealth(); } },
+            { name: "Velocidade de Tiro", description: "Aumenta a cadência de tiro.", apply: (player) => { player.shootCooldown = Math.max(0.1, player.shootCooldown * 0.85); } },
+            { name: "Dano do Projétil", description: "Aumenta o dano dos seus projéteis.", apply: (player) => { player.projectileDamage += 5; } },
+            { name: "Velocidade de Movimento", description: "Aumenta sua velocidade de movimento.", apply: (player) => { player.speed += 30; } },
+            { name: "Vida Máxima", description: "Aumenta sua vida máxima.", apply: (player) => { player.maxHealth += 20; game.uiManager.updatePlayerHealth(); } },
             { name: "Mais Projéteis", description: "Dispara um projétil adicional.", apply: (player) => { player.numProjectiles +=1; } },
-            { name: "Penetração de Projétil +", description: "Projéteis atravessam mais um inimigo.", apply: (player) => { player.projectilePierce +=1; } },
+            { name: "Penetração de Projétil", description: "Projéteis atravessam mais um inimigo.", apply: (player) => { player.projectilePierce +=1; } },
             { name: "Recuperar Vida", description: "Recupera 50% da vida máxima.", apply: (player) => { player.health = Math.min(player.maxHealth, player.health + player.maxHealth * 0.5); game.uiManager.updatePlayerHealth(); } },
-            { name: "Raio de Coleta XP +", description: "Aumenta o raio de coleta de orbes de XP.", apply: (player) => { game.xpOrbs.forEach(orb => orb.collectionRadius *= 1.2); ExperienceOrb.prototype.collectionRadius *=1.2; } } 
+            { name: "Raio de Coleta XP", description: "Aumenta o raio de coleta de orbes de XP.", apply: (player) => { game.xpOrbs.forEach(orb => orb.collectionRadius *= 1.2); ExperienceOrb.prototype.collectionRadius *=1.2; } } 
         ];
         
         // Power-ups lendários - não stackáveis
