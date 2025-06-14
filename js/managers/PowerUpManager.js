@@ -32,17 +32,6 @@ class PowerUpManager {
                 } 
             },
             {
-                name: "Tempestade de Raio",
-                description: "A cada 15 mortes, raios caem em inimigos aleatórios!",
-                apply: (player) => {
-                    player.hasLightningStorm = true;
-                    player.lightningKillCount = 0;
-                    player.lightningThreshold = 15;
-                    player.lightningDamage = 80;
-                    player.lightningChainRange = 120;
-                }
-            },
-            {
                 name: "Inferno Andante",
                 description: "Deixa um rastro de fogo que queima inimigos!",
                 apply: (player) => {
@@ -91,7 +80,7 @@ class PowerUpManager {
             legendary => !this.chosenLegendaryPowerUps.includes(legendary.name)
         );
         
-        if (availableLegendary.length > 0 && Math.random() < 0.80) { 
+        if (availableLegendary.length > 0 && Math.random() < 0.05) { 
             // Adiciona um power-up lendário aleatório
             const randomLegendary = availableLegendary[Math.floor(Math.random() * availableLegendary.length)];
             options.push(randomLegendary);

@@ -5,67 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dracula Survivors</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Centraliza os botões de power up em grid 2x2, mantendo simetria */
-        #powerUpOptions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 32px;
-            justify-items: center;
-            align-items: center;
-            margin-top: 32px;
-            margin-bottom: 16px;
-            min-width: 400px;
-        }
-        .powerup-button {
-            min-width: 220px;
-            min-height: 90px;
-            font-size: 1.5em;
-            background: #07206a;
-            color: #e0e0e0;
-            border: 2px solid #00ffff;
-            border-radius: 12px;
-            box-shadow: 0 0 16px #00ffff33;
-            margin: 0;
-            transition: transform 0.1s, box-shadow 0.1s;
-            text-align: center;
-        }
-        .powerup-button:focus {
-            outline: 2px solid #fff;
-            box-shadow: 0 0 24px #00ffffcc;
-        }
-        
-        /* Estilo para power-ups lendários */
-        .legendary-powerup {
-            background: linear-gradient(135deg, #8B4513, #DAA520) !important;
-            border: 2px solid #FFD700 !important;
-            box-shadow: 0 0 20px #FFD70050 !important;
-            color: #FFF !important;
-        }
-        
-        .legendary-powerup:hover {
-            box-shadow: 0 0 30px #FFD700AA !important;
-            transform: scale(1.05) !important;
-        }
-        
-        /* Estilo para botões de substituição */
-        .replace-button {
-            background: linear-gradient(135deg, #8B1538, #DA2020) !important;
-            border: 2px solid #FF4444 !important;
-            box-shadow: 0 0 20px #FF444450 !important;
-        }
-        
-        .replace-button:hover {
-            box-shadow: 0 0 30px #FF4444AA !important;
-        }
-        
-        @media (max-width: 600px) {
-            #powerUpOptions {
-                grid-template-columns: 1fr;
-                min-width: unset;
-            }
-        }
-    </style>
+    
 </head>
 <body>
     <div id="mainMenu" class="menu-container">
