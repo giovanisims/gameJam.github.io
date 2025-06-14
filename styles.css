@@ -9,11 +9,11 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #080815; /* Even deeper dark blue */
-    background-image: radial-gradient(circle at center, #100020 0%, #080815 100%); /* Deep purple-blue gradient */
-    color: #fff; /* Keeping white for general text */
+    background-color: #080815;
+    background-image: radial-gradient(circle at center, #100020 0%, #080815 100%);
+    color: #fff;
     font-family: 'Poppins', sans-serif;
-    overflow: hidden; /* Para evitar barras de rolagem com o canvas */
+    overflow: hidden;
 }
 
 /* Game theme and atmosphere enhancements */
@@ -24,7 +24,6 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Mystic Glow Colors */
     background: radial-gradient(circle at 30% 30%, rgba(30, 0, 50, 0.15), transparent 70%),
                 radial-gradient(circle at 70% 70%, rgba(0, 20, 50, 0.15), transparent 70%);
     pointer-events: none;
@@ -32,13 +31,11 @@ body::before {
 }
 
 canvas {
-    /* Mystic Glow Colors */
-    border: 2.4px solid #606080; /* Muted blue-purple border */
-    background-color: #000; /* Keeping pure black for game area */
-    display: block; /* Remove espaço extra abaixo do canvas */
-    border-radius: 9.6px; /* 20% bigger border radius */
-    /* Mystic Glow Colors */
-    box-shadow: 0 0 24px rgba(100, 100, 255, 0.4), 0 0 12px rgba(50, 50, 200, 0.3); /* Blue glow */
+    border: 2.4px solid #606080;
+    background-color: #000;
+    display: block;
+    border-radius: 9.6px;
+    box-shadow: 0 0 24px rgba(100, 100, 255, 0.4), 0 0 12px rgba(50, 50, 200, 0.3);
     max-width: 95vw;
     max-height: 85vh;
     width: auto;
@@ -50,15 +47,13 @@ canvas {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px; /* 20% bigger padding */
-    /* Mystic Glow Colors */
-    background-color: rgba(10, 10, 20, 0.92); /* Darker blue-purple tint */
+    padding: 24px;
+    background-color: rgba(10, 10, 20, 0.92);
     backdrop-filter: blur(5px);
-    border-radius: 12px; /* 20% bigger border radius */
-    box-shadow: 0 0 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+    border-radius: 12px;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
-    /* Mystic Glow Colors */
-    border: 1px solid rgba(150, 150, 255, 0.1); /* Subtle blue border */
+    border: 1px solid rgba(150, 150, 255, 0.1);
     z-index: 1000;
     position: relative;
     animation: fadeIn 0.5s ease-out;
@@ -66,14 +61,13 @@ canvas {
 }
 
 .menu-container h1, .about-container h1, .game-over-container h1, .level-up-container h1 {
-    /* Mystic Glow Colors */
-    color: #80aaff; /* Lighter blue for titles */
-    margin-bottom: 24px; /* 20% bigger margin */
-    font-size: 50px; /* Enhanced font size */
-    /* Mystic Glow Colors */
-    text-shadow: 0 0 10px rgba(128, 170, 255, 0.5);
+    color: #aa0000;
+    margin-bottom: 24px;
+    font-size: 50px;
+    text-shadow: 0 0 10px rgba(170, 0, 0, 0.5);
     letter-spacing: 2px;
     font-weight: 600;
+    font-family: 'Pixelify Sans';
 }
 
 /* Pixelated font for game title to match pixelated game graphics */
@@ -88,29 +82,25 @@ canvas {
 }
 
 .menu-button, .powerup-button {
-    /* Mystic Glow Colors */
-    background: linear-gradient(to bottom, #aa0000, #660000); /* Deep red buttons */
-    color: white;
+    background: linear-gradient(to bottom, #aa0000, #660000);
+    color: #e0faff;
     border: none;
-    padding: 14.4px 30px; /* 20% bigger padding */
-    margin: 12px; /* 20% bigger margin */
-    border-radius: 6px; /* 20% bigger border radius */
+    padding: 14.4px 30px;
+    margin: 12px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1.2em; /* 20% bigger font size */
+    font-size: 1.2em;
     transition: all 0.3s ease;
-    /* Mystic Glow Colors */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 4px rgba(100, 0, 200, 0.5); /* Purple glow */
-    font-weight: 500;
-    letter-spacing: 0.5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 4px rgba(100, 0, 200, 0.5);
+    font-weight: bolder;
+    letter-spacing: 1px;
     min-width: 300px;
 }
 
 .menu-button:hover, .powerup-button:hover {
-    /* Mystic Glow Colors */
-    background: linear-gradient(to bottom, #6600AA, #330077);
+    background: linear-gradient(to bottom, #D4AF37, #8B6914);
     transform: translateY(-3px);
-    /* Mystic Glow Colors */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), 0 0 8px rgba(150, 0, 255, 0.6);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4), 0 0 8px rgba(218, 165, 32, 0.6);
 }
 
 .menu-button:active, .powerup-button:active {
@@ -119,30 +109,19 @@ canvas {
 }
 
 .about-container p {
-    margin: 12px 0; /* 20% bigger margin */
-    font-size: 1.32em; /* 20% bigger font size */
+    margin: 12px 0;
+    font-size: 1.32em;
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.9);
 }
 
 .about-container p strong {
-    /* Mystic Glow Colors */
-    color: #ffcc00; /* Gold for strong text */
+    color: #ffcc00;
     font-weight: 600;
 }
 
-/* Game controls highlight in about section */
-.about-container p:nth-child(2) {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 10px 15px;
-    border-radius: 8px;
-    /* Mystic Glow Colors */
-    border-left: 3px solid #80aaff; /* Blue highlight */
-    margin: 20px 0;
-}
-
 #gameCanvas {
-    display: none; /* Escondido inicialmente */
+    display: none;
     position: relative;
     transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -154,8 +133,7 @@ canvas {
 .ui-element {
     position: absolute;
     color: #fff;
-    font-size: 1.44em; /* 20% bigger font size */
-    /* Mystic Glow Colors - text shadow adapted for new colors */
+    font-size: 1.44em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 6px rgba(100, 100, 255, 0.4);
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -164,24 +142,21 @@ canvas {
 #scoreDisplay { 
     top: 10px; 
     left: 10px;
-    /* Mystic Glow Colors */
-    color: #ffd700; /* Gold */
+    color: #ffd700;
     font-weight: 500;
 }
 
 #levelDisplay { 
     top: 10px; 
     right: 10px;
-    /* Mystic Glow Colors */
-    color: #80aaff; /* Light blue */
+    color: #80aaff;
     font-weight: 500;
 }
 
 #livesDisplay { 
     top: 70px; 
     left: 10px;
-    /* Mystic Glow Colors */
-    color: #ff66aa; /* Pinkish-red */
+    color: #ff66aa;
     font-weight: 500;
 }
 
@@ -190,12 +165,10 @@ canvas {
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 360px; /* 20% bigger width */
-    height: 24px; /* 20% bigger height */
-    /* Mystic Glow Colors */
-    background-color: rgba(30, 30, 60, 0.7); /* Darker blue-purple */
-    border-radius: 6px; /* 20% bigger border radius */
-    /* Mystic Glow Colors */
+    width: 360px;
+    height: 24px;
+    background-color: rgba(30, 30, 60, 0.7);
+    border-radius: 6px;
     border: 1px solid rgba(150, 150, 200, 0.4);
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
     overflow: hidden;
@@ -204,11 +177,9 @@ canvas {
 #xpBar {
     width: 0%;
     height: 100%;
-    /* Mystic Glow Colors */
-    background: linear-gradient(to right, #80aaff, #4070ff); /* Light blue to deeper blue */
-    border-radius: 6px; /* 20% bigger border radius */
+    background: linear-gradient(to right, #80aaff, #4070ff);
+    border-radius: 6px;
     transition: width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    /* Mystic Glow Colors */
     box-shadow: 0 0 8px rgba(128, 170, 255, 0.7);
 }
 
@@ -217,17 +188,14 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* Mystic Glow Colors */
-    color: #ffea00; /* Bright yellow */
-    font-size: 2.4em; /* 20% bigger font size */
+    color: #ffea00;
+    font-size: 2.4em;
     font-weight: bold;
-    /* Mystic Glow Colors */
     text-shadow: 0 0 10px rgba(255, 234, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.8);
-    display: none; /* Escondido inicialmente */
-    padding: 24px; /* 20% bigger padding */
+    display: none;
+    padding: 24px;
     background-color: rgba(0, 0, 0, 0.75);
-    border-radius: 12px; /* 20% bigger border radius */
-    /* Mystic Glow Colors */
+    border-radius: 12px;
     border: 1px solid rgba(255, 234, 0, 0.3);
     box-shadow: 0 0 20px rgba(255, 234, 0, 0.3);
     backdrop-filter: blur(3px);
@@ -235,11 +203,10 @@ canvas {
 }
 
 /* Sprite positioning for game entities */
-/* Sprite positioning - positioned above canvas but below UI menus */
 body img[src*="sprites/"] {
     position: absolute;
     pointer-events: none;
-    z-index: 10; /* Above canvas (z-index 1) but below UI menus (z-index 1000+) */
+    z-index: 10;
     image-rendering: pixelated;
     transform-origin: center;
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
@@ -247,28 +214,23 @@ body img[src*="sprites/"] {
 
 /* Enhanced sprite effects */
 body img[src*="sprites/player.webp"] {
-    /* Mystic Glow Colors */
-    filter: drop-shadow(0 0 8px rgba(100, 100, 255, 0.6)); /* Blue player glow */
+    filter: drop-shadow(0 0 8px rgba(100, 100, 255, 0.6));
 }
 
 body img[src*="sprites/boss.webp"] {
-    /* Mystic Glow Colors */
-    filter: drop-shadow(0 0 12px rgba(255, 50, 200, 0.6)); /* Magenta boss glow */
+    filter: drop-shadow(0 0 12px rgba(255, 50, 200, 0.6));
     animation: bossGlow 2s infinite alternate;
 }
 
 body img[src*="sprites/ranged_enemy.webp"] {
-    /* Mystic Glow Colors */
-    filter: drop-shadow(0 0 5px rgba(200, 0, 255, 0.5)); /* Purple ranged enemy */
+    filter: drop-shadow(0 0 5px rgba(200, 0, 255, 0.5));
 }
 
 body img[src*="sprites/melee_enemy.webp"] {
-    /* Mystic Glow Colors */
-    filter: drop-shadow(0 0 5px rgba(255, 100, 100, 0.5)); /* Red melee enemy */
+    filter: drop-shadow(0 0 5px rgba(255, 100, 100, 0.5));
 }
 
 @keyframes bossGlow {
-    /* Mystic Glow Colors */
     from { filter: drop-shadow(0 0 8px rgba(255, 50, 200, 0.6)); }
     to { filter: drop-shadow(0 0 16px rgba(255, 50, 200, 0.8)); }
 }
@@ -287,7 +249,6 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 @keyframes glow {
-    /* Mystic Glow Colors - adapted for yellow */
     from { box-shadow: 0 0 10px rgba(255, 234, 0, 0.3); }
     to { box-shadow: 0 0 20px rgba(255, 234, 0, 0.6); }
 }
@@ -343,20 +304,16 @@ body img[src*="sprites/melee_enemy.webp"] {
 
 /* Style for high score display */
 #highScoreDisplay {
-    /* Mystic Glow Colors */
-    color: #ffd700 !important; /* Gold high score */
+    color: #ffd700 !important;
     font-weight: 500;
-    /* Mystic Glow Colors */
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
     margin: 15px 0 !important;
 }
 
 #finalScore {
-    /* Mystic Glow Colors */
-    color: #ffea00; /* Bright yellow final score */
+    color: #ffea00;
     font-size: 1.4em;
     font-weight: 600;
-    /* Mystic Glow Colors */
     text-shadow: 0 0 8px rgba(255, 234, 0, 0.5);
     margin: 20px 0;
     animation: pulse 2s infinite;
@@ -380,24 +337,21 @@ body img[src*="sprites/melee_enemy.webp"] {
 
 /* Power-up specific styling */
 .powerup-button {
-    /* Mystic Glow Colors */
-    border: 1px solid rgba(128, 170, 255, 0.3); /* Blue border */
-    background: linear-gradient(to bottom, #002266, #001144); /* Very dark blue power-up buttons */
+    border: 1px solid rgba(128, 170, 255, 0.3);
+    background: linear-gradient(to bottom, #002266, #001144);
     min-width: 240px;
     padding: 18px 30px;
     transition: all 0.3s ease;
 }
 
 .powerup-button:hover {
-    /* Mystic Glow Colors */
     background: linear-gradient(to bottom, #003388, #002255);
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(128, 170, 255, 0.6);
 }
 
 .powerup-button strong {
-    /* Mystic Glow Colors */
-    color: #aaddff; /* Lighter blue for power-up titles */
+    color: #aaddff;
     display: block;
     margin-bottom: 8px;
     font-size: 1.3em;
@@ -405,8 +359,7 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 .powerup-button small {
-    /* Mystic Glow Colors */
-    color: #e0f0ff; /* Lightest blue for power-up descriptions */
+    color: #e0f0ff;
     font-size: 0.95em;
     line-height: 1.4;
     display: block;
@@ -415,7 +368,6 @@ body img[src*="sprites/melee_enemy.webp"] {
 /* Visual feedback when gaining score */
 @keyframes scoreFlash {
     0% { transform: scale(1); }
-    /* Mystic Glow Colors - adapted for yellow */
     50% { transform: scale(1.2); color: #ffea00; }
     100% { transform: scale(1); }
 }
@@ -427,14 +379,12 @@ body img[src*="sprites/melee_enemy.webp"] {
 /* Improved canvas focus effect when playing */
 #gameCanvas:focus {
     outline: none;
-    /* Mystic Glow Colors */
     box-shadow: 0 0 30px rgba(100, 100, 255, 0.6), 0 0 15px rgba(50, 50, 200, 0.4);
 }
 
 /* Custom button focus styles for accessibility */
 .menu-button:focus, .powerup-button:focus {
     outline: none;
-    /* Mystic Glow Colors */
     box-shadow: 0 0 0 3px rgba(128, 170, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -442,7 +392,7 @@ body img[src*="sprites/melee_enemy.webp"] {
 .menu-container h1 {
     font-family: 'Pixelify Sans';
     font-size: 4em;
-    background: linear-gradient(to right, #ee4040, #aa0000, #ee4040); /* Darker, more vibrant red gradient for title */
+    background: linear-gradient(to right, #ee4040, #aa0000, #ee4040);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -451,28 +401,24 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 @keyframes titleGlow {
-    /* Mystic Glow Colors */
     from { text-shadow: 0 0 15px rgba(170, 0, 0, 0.5); }
     to { text-shadow: 0 0 5px rgba(255, 215, 0, 0.8); }
 }
 
 /* Better game over screen */
 .game-over-container {
-    /* Mystic Glow Colors */
-    background-color: rgba(20, 10, 15, 0.92); /* Darker purplish-red tint */
-    border: 1px solid rgba(255, 100, 150, 0.3); /* Pinkish-red border */
+    background-color: rgba(20, 10, 15, 0.92);
+    border: 1px solid rgba(255, 100, 150, 0.3);
 }
 
 .game-over-container h1 {
-    /* Mystic Glow Colors */
-    color: #ff80aaff; /* Light blue */
+    color: #ff80aaff;
     text-shadow: 0 0 10px rgba(255, 128, 170, 0.7);
 }
 
 /* Better level-up screen */
 .level-up-container {
-    /* Mystic Glow Colors */
-    background-color: rgba(10, 20, 30, 0.92); /* Darker blue-green tint */
+    background-color: rgba(10, 20, 30, 0.92);
     border: 1px solid rgba(150, 200, 255, 0.3);
     position: fixed;
     top: 50%;
@@ -482,14 +428,12 @@ body img[src*="sprites/melee_enemy.webp"] {
     max-width: 90%;
     max-height: 90vh;
     overflow-y: auto;
-    /* Mystic Glow Colors */
     box-shadow: 0 0 30px rgba(50, 150, 255, 0.5);
     animation: levelUpAppear 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .level-up-container h1 {
-    /* Mystic Glow Colors */
-    color: #aaffff; /* Light cyan for level up */
+    color: #aaffff;
     animation: levelUpPulse 1s infinite alternate;
     font-size: 2.2em;
     margin-bottom: 15px;
@@ -497,10 +441,8 @@ body img[src*="sprites/melee_enemy.webp"] {
 
 .level-up-container p {
     font-size: 1.4em;
-    /* Mystic Glow Colors */
     color: #e0faff;
     margin: 0 0 20px 0;
-    /* Mystic Glow Colors */
     text-shadow: 0 0 8px rgba(100, 200, 255, 0.4);
 }
 
@@ -547,19 +489,17 @@ body img[src*="sprites/melee_enemy.webp"] {
 }
 
 ::-webkit-scrollbar-thumb {
-    /* Mystic Glow Colors */
-    background: rgba(100, 150, 255, 0.5); /* Blue scrollbar */
+    background: rgba(100, 150, 255, 0.5);
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    /* Mystic Glow Colors */
     background: rgba(120, 170, 255, 0.7);
 }
 
 /* Enhanced transition effects */
 #gameCanvas {
-    display: none; /* Escondido inicialmente */
+    display: none;
     position: relative;
     transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -643,4 +583,9 @@ body {
     .powerup-button small {
         font-size: 0.9em;
     }
+}
+
+.team-members {
+    display: flex;
+    gap: 30px;
 }
