@@ -3,7 +3,7 @@
 Livia Rosemach Oliveira
 Giovani Nota Simões
 Sarah Maneira
-Enzo Leitão
+Lucas Brisch Zanlorenzi
 
 # INSTRUCTIONS
 
