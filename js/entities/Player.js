@@ -1,46 +1,42 @@
 // Player class - main character controlled by the user
 class Player extends Entity {
     constructor(x, y) {
-        super(x, y, 18, '#00FFFF', 'sprites/player.webp'); // Ciano with player sprite - 20% bigger
-        this.speed = 250; // pixels por segundo
-        this.keys = {}; // Para armazenar o estado das teclas pressionadas
+        super(x, y, 18, '#00FFFF', 'sprites/player.webp');
+        this.speed = 250;
+        this.keys = {};
         this.health = 100;
         this.maxHealth = 100;
         this.lives = 3;
         this.level = 1;
         this.xp = 0;
         this.xpToNextLevel = 100;
-        this.shootCooldown = 0.5; // segundos
+        this.shootCooldown = 0.5;
         this.shootTimer = 0;
         this.projectiles = [];
         this.projectileSpeed = 400;
         this.projectileDamage = 10;
-        this.projectileSize = 6; // 20% bigger projectiles
+        this.projectileSize = 6;
         this.projectilePierce = 0;
         this.numProjectiles = 1;
         this.projectileSpread = 0.1;
         this.invulnerableTime = 1.5;
         this.invulnerableTimer = 0;
         
-        // Player sprite should be a bit larger
-        this.spriteSize = 36; // 20% bigger sprite
+        this.spriteSize = 36;
 
-        // Neural Overload variables
         this.hasNeuralOverload = false;
         this.isOverloadActive = false;
         this.overloadTimer = 0;
-        this.overloadCooldown = 5; // Cooldown for neural overload
-        this.overloadDuration = 3; // Duration of neural overload
+        this.overloadCooldown = 5;
+        this.overloadDuration = 3;
 
-        // Fire Trail variables
         this.hasFireTrail = false;
         this.fireTrailTimer = 0;
-        this.fireTrailInterval = 0.1; // Interval between fire trail effects
+        this.fireTrailInterval = 0.1;
 
-        // Cyclone Axe variables
         this.hasCycloneAxe = false;
         this.cycloneAngle = 0;
-        this.cycloneSpeed = 2 * Math.PI; // Full rotation in 1 second
+        this.cycloneSpeed = 2 * Math.PI;
         this.cycloneRadius = 30;
         this.cycloneDamage = 5;
     }
@@ -63,10 +59,9 @@ class Player extends Entity {
 
     shoot(targetPosition) {
         if (this.shootTimer <= 0) {
-            const baseAngle = targetPosition.subtract(this.position).angle();
+            const baseAngle = targetPosition.subtract(this.position).angle();            
             let shotsToFire = this.numProjectiles;
             
-            // Neural Overload duplica os tiros
             if (this.isOverloadActive) {
                 shotsToFire *= 2;
             }
@@ -81,7 +76,7 @@ class Player extends Entity {
                     this.position.x,
                     this.position.y,
                     this.projectileSize,
-                    this.isOverloadActive ? '#00FFFF' : '#FFFF00', // Cor diferente durante overload
+                    this.isOverloadActive ? '#00FFFF' : '#FFFF00',
                     velocity,
                     this.projectileDamage,
                     this.projectilePierce
@@ -107,7 +102,6 @@ class Player extends Entity {
             this.invulnerableTimer -= dt;
         }
 
-        // Neural Overload logic
         if (this.hasNeuralOverload) {
             this.overloadTimer += dt;
             if (!this.isOverloadActive && this.overloadTimer >= this.overloadCooldown) {
@@ -121,7 +115,6 @@ class Player extends Entity {
             }
         }
 
-        // Fire Trail logic
         if (this.hasFireTrail) {
             this.fireTrailTimer += dt;
             if (this.fireTrailTimer >= this.fireTrailInterval) {
@@ -130,19 +123,17 @@ class Player extends Entity {
             }
         }
 
-        // Cyclone Axe logic
         if (this.hasCycloneAxe) {
             this.cycloneAngle += this.cycloneSpeed * dt;
             if (this.cycloneAngle >= Math.PI * 2) {
                 this.cycloneAngle = 0;
             }
             
-            // Check cyclone damage to enemies
             enemies.forEach(enemy => {
                 if (!enemy.active) return;
                 const distance = this.position.distance(enemy.position);
                 if (distance <= this.cycloneRadius) {
-                    enemy.takeDamage(this.cycloneDamage * dt); // Damage over time
+                    enemy.takeDamage(this.cycloneDamage * dt);
                 }
             });
         }
@@ -175,13 +166,11 @@ class Player extends Entity {
             }
         }
         
-        // Draw cyclone axe
         if (this.hasCycloneAxe) {
             ctx.save();
             ctx.translate(this.position.x, this.position.y);
             ctx.rotate(this.cycloneAngle);
             
-            // Draw spinning axe effect
             ctx.strokeStyle = '#FF0000';
             ctx.lineWidth = 4;
             ctx.shadowColor = '#FF0000';
@@ -203,13 +192,11 @@ class Player extends Entity {
         super.draw(ctx);
         this.projectiles.forEach(p => p.draw(ctx));
 
-        // Health bar - 20% bigger
         ctx.fillStyle = 'grey';
         ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2, 6);
         ctx.fillStyle = 'green';
         ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 12, this.radius * 2 * (this.health / this.maxHealth), 6);
         
-        // Neural Overload screen effect
         if (this.isOverloadActive) {
             ctx.save();
             ctx.globalAlpha = 0.1 + 0.1 * Math.sin(Date.now() * 0.01);
@@ -253,7 +240,6 @@ class Player extends Entity {
         game.uiManager.updateLevel(this.level);
         game.uiManager.updateXPBar(this.xp, this.xpToNextLevel);
         
-        // Check if this is a boss level (every 10 levels)
         if (this.level % 10 === 0) {
             game.spawnBoss();
             game.uiManager.showMessage(`Nível ${this.level}! Boss apareceu!`, 4);
@@ -269,9 +255,7 @@ class Player extends Entity {
     }
 
     destroy() {
-        // Clean up player projectiles
         this.projectiles.forEach(proj => proj.destroy());
-        // Call parent destroy method to clean up sprite element
         super.destroy();
     }
 }

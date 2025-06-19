@@ -11,7 +11,7 @@ class Enemy extends Entity {
         this.shootTimer = Math.random() * this.shootCooldown;
         this.projectileSpeed = 0;
         this.projectileColor = '#FF00FF';
-        this.projectileSize = 4.8; // 20% bigger projectiles
+        this.projectileSize = 4.8;
     }
 
     update(dt, player, gameWidth, gameHeight) {
@@ -46,7 +46,6 @@ class Enemy extends Entity {
     takeDamage(amount) {
         this.health -= amount;
         
-        // Vampirismo - jogador se cura baseado no dano causado
         if (game.player.hasVampirism) {
             const healAmount = Math.floor(amount * game.player.vampirismRate);
             game.player.health = Math.min(game.player.maxHealth, game.player.health + healAmount);
@@ -54,7 +53,6 @@ class Enemy extends Entity {
         }
         
         if (this.health <= 0) {
-            // Lightning Storm trigger
             if (game.player.hasLightningStorm) {
                 game.player.lightningKillCount++;
                 if (game.player.lightningKillCount >= game.player.lightningThreshold) {
@@ -63,7 +61,7 @@ class Enemy extends Entity {
                 }
             }
             
-            this.destroy(); // Clean up sprite element
+            this.destroy();
             game.player.addXP(this.xpValue);
             game.score += this.xpValue * 10;
             game.uiManager.updateScore(game.score);
@@ -75,30 +73,29 @@ class Enemy extends Entity {
 
     draw(ctx) {
         super.draw(ctx);
-        // Health bar - 20% bigger
         ctx.fillStyle = 'grey';
-        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 8.4, this.radius * 2, 4.8); // 20% bigger height and offset
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 8.4, this.radius * 2, 4.8);
         ctx.fillStyle = 'red';
-        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 8.4, this.radius * 2 * (this.health / this.maxHealth), 4.8); // 20% bigger
+        ctx.fillRect(this.position.x - this.radius, this.position.y - this.radius - 8.4, this.radius * 2 * (this.health / this.maxHealth), 4.8);
     }
 }
 
 class ChaserEnemy extends Enemy {
     constructor(x, y) {
-        super(x, y, 14.4, '#FF6347', 100, 50, 10, 20); // 20% bigger radius
+        super(x, y, 14.4, '#FF6347', 100, 50, 10, 20);
         this.loadSprite('sprites/melee_enemy.webp');
-        this.spriteSize = 28.8; // 20% bigger sprite
+        this.spriteSize = 28.8;
     }
 }
 
 class ShooterEnemy extends Enemy {
     constructor(x, y) {
-        super(x, y, 18, '#9370DB', 60, 80, 8, 30); // 20% bigger radius
+        super(x, y, 18, '#9370DB', 60, 80, 8, 30);
         this.shootCooldown = 2.5;
         this.projectileSpeed = 200;
         this.projectileDamage = 10;
         this.loadSprite('sprites/ranged_enemy.webp');
-        this.spriteSize = 36; // 20% bigger sprite
+        this.spriteSize = 36;
     }
     
     shoot(targetPosition) {
@@ -125,7 +122,7 @@ class ShooterEnemy extends Enemy {
 
 class BossEnemy extends Enemy {
     constructor(x, y, level) {
-        const bossSize = (30 + Math.floor(level / 10) * 5) * 1.2; // 20% bigger boss size
+        const bossSize = (30 + Math.floor(level / 10) * 5) * 1.2;
         const bossHealth = 500 + level * 50;
         const bossDamage = 25 + Math.floor(level / 5) * 5;
         const bossXP = 200 + level * 20;
@@ -136,14 +133,12 @@ class BossEnemy extends Enemy {
         this.shootCooldown = 1.0;
         this.projectileSpeed = 250;
         this.projectileDamage = 20 + Math.floor(level / 5) * 5;
-        this.projectileSize = 9.6; // 20% bigger projectiles
+        this.projectileSize = 9.6;
         this.projectileColor = '#FF4444';
         
-        // Load boss sprite and set appropriate size
         this.loadSprite('sprites/boss.webp');
-        this.spriteSize = bossSize * 2.4; // 20% bigger boss sprite
+        this.spriteSize = bossSize * 2.4;
         
-        // Boss special abilities
         this.chargeSpeed = this.speed * 2.5;
         this.chargeTimer = 0;
         this.chargeCooldown = 5.0;
@@ -152,7 +147,6 @@ class BossEnemy extends Enemy {
         this.chargeDuration = 1.5;
         this.chargeTimeLeft = 0;
         
-        // Multi-phase behavior
         this.phase = 1;
         this.maxPhases = Math.min(3, Math.floor(level / 10) + 1);
         this.phaseHealth = this.health / this.maxPhases;
@@ -232,7 +226,6 @@ class BossEnemy extends Enemy {
     takeDamage(amount) {
         this.health -= amount;
         
-        // Vampirismo - jogador se cura baseado no dano causado
         if (game.player.hasVampirism) {
             const healAmount = Math.floor(amount * game.player.vampirismRate);
             game.player.health = Math.min(game.player.maxHealth, game.player.health + healAmount);
@@ -240,7 +233,6 @@ class BossEnemy extends Enemy {
         }
         
         if (this.health <= 0) {
-            // Lightning Storm trigger
             if (game.player.hasLightningStorm) {
                 game.player.lightningKillCount++;
                 if (game.player.lightningKillCount >= game.player.lightningThreshold) {
@@ -249,13 +241,12 @@ class BossEnemy extends Enemy {
                 }
             }
             
-            this.destroy(); // Clean up sprite element
+            this.destroy();
             game.player.addXP(this.xpValue);
             game.score += this.xpValue * 10;
             game.uiManager.updateScore(game.score);
             game.uiManager.showMessage(`Boss Derrotado! +${this.xpValue} XP`, 3);
             
-            // Boss drops multiple health orbs
             for (let i = 0; i < 3; i++) {
                 const offsetX = (Math.random() - 0.5) * 60;
                 const offsetY = (Math.random() - 0.5) * 60;
@@ -267,26 +258,23 @@ class BossEnemy extends Enemy {
     draw(ctx) {
         super.draw(ctx);
         
-        // Draw boss health bar (20% bigger)
-        const barWidth = this.radius * 3.6; // 20% bigger
-        const barHeight = 9.6; // 20% bigger
+        const barWidth = this.radius * 3.6;
+        const barHeight = 9.6;
         ctx.fillStyle = 'grey';
-        ctx.fillRect(this.position.x - barWidth/2, this.position.y - this.radius - 18, barWidth, barHeight); // 20% bigger offset
+        ctx.fillRect(this.position.x - barWidth/2, this.position.y - this.radius - 18, barWidth, barHeight);
         ctx.fillStyle = 'red';
         ctx.fillRect(this.position.x - barWidth/2, this.position.y - this.radius - 18, barWidth * (this.health / this.maxHealth), barHeight);
         
-        // Draw boss indicator
         ctx.fillStyle = '#FFD700';
-        ctx.font = '14.4px Arial'; // 20% bigger font
+        ctx.font = '14.4px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('BOSS', this.position.x, this.position.y - this.radius - 24); // 20% bigger offset
+        ctx.fillText('BOSS', this.position.x, this.position.y - this.radius - 24);
         
-        // Draw charge indicator
         if (this.isCharging) {
             ctx.strokeStyle = '#FF0000';
-            ctx.lineWidth = 3.6; // 20% bigger line width
+            ctx.lineWidth = 3.6;
             ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y, this.radius + 6, 0, Math.PI * 2); // 20% bigger arc offset
+            ctx.arc(this.position.x, this.position.y, this.radius + 6, 0, Math.PI * 2);
             ctx.stroke();
         }
     }

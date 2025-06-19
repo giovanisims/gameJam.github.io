@@ -22,7 +22,6 @@ class UIManager {
     }
 
     showMainMenu() {
-        // Hide all sprites when showing menu
         if (this.game) {
             this.game.hideAllSprites();
         }
@@ -38,7 +37,6 @@ class UIManager {
     }
 
     showAboutScreen() {
-        // Hide all sprites when showing about screen
         if (this.game) {
             this.game.hideAllSprites();
         }
@@ -55,7 +53,6 @@ class UIManager {
         this.gameCanvas.style.display = 'block';
         this.showGameUI();
         
-        // Show sprites when game is active
         if (this.game) {
             this.game.showAllSprites();
         }
@@ -72,7 +69,6 @@ class UIManager {
             this.finalScoreDisplay.textContent = `Sua Pontuação: ${score}`;
         }
         
-        // Hide all sprites when showing game over screen
         if (this.game) {
             this.game.hideAllSprites();
         }
@@ -88,7 +84,6 @@ class UIManager {
     }
 
     showPauseMenu(currentScore) {
-        // Hide all sprites when showing pause menu
         if (this.game) {
             this.game.hideAllSprites();
         }
@@ -104,24 +99,20 @@ class UIManager {
         this.gameCanvas.style.display = 'block';
         this.showGameUI();
         
-        // Show sprites when resuming game
         if (this.game) {
             this.game.showAllSprites();
         }
     }
 
     showLevelUpScreen() {
-        // Hide all sprites when showing level up screen
         if (this.game) {
             this.game.hideAllSprites();
         }
         
-        // Add a brief delay for better transition experience
         setTimeout(() => {
             this.levelUpScreen.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+            document.body.style.overflow = 'hidden';
             
-            // Apply focus to the first upgrade button after a slight delay
             setTimeout(() => {
                 const firstButton = document.querySelector('#powerUpOptions .powerup-button');
                 if (firstButton) firstButton.focus();
@@ -166,7 +157,6 @@ class UIManager {
         }, duration * 1000);
     }
 
-    // Highscore methods
     getHighScore() {
         return parseInt(localStorage.getItem('draculaSurvivorsHighScore') || '0');
     }

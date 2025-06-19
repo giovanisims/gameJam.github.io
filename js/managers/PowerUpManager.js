@@ -12,7 +12,6 @@ class PowerUpManager {
             { name: "Raio de Coleta XP", description: "Aumenta o raio de coleta de orbes de XP.", apply: (player) => { game.xpOrbs.forEach(orb => orb.collectionRadius *= 1.2); ExperienceOrb.prototype.collectionRadius *=1.2; } } 
         ];
         
-        // Power-ups lendários - não stackáveis
         this.legendaryPowerUps = [
             { 
                 name: "Tiro Explosivo", 
@@ -75,18 +74,15 @@ class PowerUpManager {
     getRandomPowerUps(count) {
         const options = [];
         
-        // 15% de chance para um power-up lendário aparecer (se disponível)
         const availableLegendary = this.legendaryPowerUps.filter(
             legendary => !this.chosenLegendaryPowerUps.includes(legendary.name)
         );
         
         if (availableLegendary.length > 0 && Math.random() < 0.05) { 
-            // Adiciona um power-up lendário aleatório
             const randomLegendary = availableLegendary[Math.floor(Math.random() * availableLegendary.length)];
             options.push(randomLegendary);
         }
         
-        // Preenche o resto com power-ups normais
         const shuffledNormal = [...this.availablePowerUps].sort(() => 0.5 - Math.random());
         const remainingSlots = count - options.length;
         
@@ -102,7 +98,6 @@ class PowerUpManager {
         const optionsContainer = document.getElementById('powerUpOptions');
         optionsContainer.innerHTML = '';
 
-        // Interface normal de power-ups (sem verificação prévia)
         options.forEach((powerUp, index) => {
             const button = document.createElement('button');
             const isLegendary = this.legendaryPowerUps.some(legendary => legendary.name === powerUp.name);
@@ -131,15 +126,12 @@ class PowerUpManager {
         document.getElementById('levelUpScreen').style.display = 'flex';
     }
 
-    // Nova função para lidar com a seleção de power-ups
     handlePowerUpSelection(powerUp) {
         const isLegendary = this.legendaryPowerUps.some(legendary => legendary.name === powerUp.name);
         
-        // Se for lendário e já tiver 2 ativos, mostrar modal de substituição
         if (isLegendary && this.activeLegendaryPowerUps.length >= this.maxLegendaryPowerUps) {
             this.showLegendaryReplaceInterface(powerUp);
         } else {
-            // Aplicar normalmente
             this.selectPowerUp(powerUp);
         }
     }
@@ -148,7 +140,6 @@ class PowerUpManager {
         const optionsContainer = document.getElementById('powerUpOptions');
         optionsContainer.innerHTML = '';
 
-        // Título explicativo
         const title = document.createElement('div');
         title.innerHTML = '<h3 style="grid-column: 1 / -1; margin: 0; color: #FFD700;">Limite de Power-ups Lendários Atingido!</h3>';
         title.style.textAlign = 'center';
@@ -159,7 +150,6 @@ class PowerUpManager {
         subtitle.style.textAlign = 'center';
         optionsContainer.appendChild(subtitle);
 
-        // Botões dos power-ups lendários ativos (para remover)
         this.activeLegendaryPowerUps.forEach((legendaryName, index) => {
             const button = document.createElement('button');
             button.classList.add('powerup-button', 'legendary-powerup', 'replace-button');
@@ -175,7 +165,6 @@ class PowerUpManager {
             optionsContainer.appendChild(button);
         });
 
-        // Botão para cancelar e não pegar o power-up lendário
         const cancelButton = document.createElement('button');
         cancelButton.classList.add('powerup-button');
         cancelButton.innerHTML = '<strong>Cancelar</strong><br><small>Não pegar este power-up lendário</small>';
@@ -184,7 +173,6 @@ class PowerUpManager {
         cancelButton.style.borderColor = '#666666';
         
         cancelButton.onclick = () => {
-            // Volta para as opções normais, mas sem o power-up lendário rejeitado
             this.showCanceledPowerUpOptions();
         };
         
@@ -194,7 +182,6 @@ class PowerUpManager {
     }
 
     showCanceledPowerUpOptions() {
-        // Mostra apenas power-ups normais como alternativa
         const normalOptions = this.availablePowerUps.slice(0, 3);
         const optionsContainer = document.getElementById('powerUpOptions');
         optionsContainer.innerHTML = '';
@@ -219,29 +206,24 @@ class PowerUpManager {
     }
 
     replaceLegendaryPowerUp(oldLegendaryName, newLegendary) {
-        // Remove o power-up antigo
         this.removeLegendaryPowerUp(oldLegendaryName);
         
-        // Adiciona o novo
         this.selectPowerUp(newLegendary);
         
         game.uiManager.showMessage(`${oldLegendaryName} foi substituído por ${newLegendary.name}!`, 3);
     }
 
     removeLegendaryPowerUp(legendaryName) {
-        // Remove da lista de ativos
         const index = this.activeLegendaryPowerUps.indexOf(legendaryName);
         if (index > -1) {
             this.activeLegendaryPowerUps.splice(index, 1);
         }
 
-        // Remove da lista de escolhidos
         const chosenIndex = this.chosenLegendaryPowerUps.indexOf(legendaryName);
         if (chosenIndex > -1) {
             this.chosenLegendaryPowerUps.splice(chosenIndex, 1);
         }
 
-        // Remove os efeitos do jogador
         this.removeLegendaryEffects(legendaryName);
     }
 
@@ -294,29 +276,24 @@ class PowerUpManager {
     }
     
     selectPowerUp(powerUp) {
-        // Add selection effect before applying
         const buttons = document.querySelectorAll('.powerup-button');
         buttons.forEach(btn => btn.disabled = true);
         
-        // Add visual feedback for selection
         if (event && event.currentTarget) {
             event.currentTarget.style.transform = 'scale(1.1)';
             event.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.8)';
         }
         
-        // Apply the power-up after a brief delay for visual feedback
         setTimeout(() => {
             game.player.applyPowerUp(powerUp);
             this.chosenPowerUps.push(powerUp.name);
             
-            // Se for lendário, adiciona à lista de lendários escolhidos e ativos
             const isLegendary = this.legendaryPowerUps.some(legendary => legendary.name === powerUp.name);
             if (isLegendary) {
                 this.chosenLegendaryPowerUps.push(powerUp.name);
                 this.activeLegendaryPowerUps.push(powerUp.name);
             }
             
-            // Hide screen and restore body scroll
             document.getElementById('levelUpScreen').style.display = 'none';
             document.body.style.overflow = '';
             

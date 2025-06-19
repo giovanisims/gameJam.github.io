@@ -4,12 +4,10 @@ class Game {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
         
-        // Set larger base canvas size and make it responsive
         this.baseWidth = 1200;
         this.baseHeight = 800;
         this.updateCanvasSize();
         
-        // Add resize listener for responsiveness
         window.addEventListener('resize', () => this.updateCanvasSize());
 
         this.gameState = 'mainMenu';
@@ -35,12 +33,10 @@ class Game {
         this.uiManager.updateHighScore();
     }
 
-    // Method to update canvas size responsively
     updateCanvasSize() {
         const maxWidth = Math.min(window.innerWidth * 0.95, this.baseWidth);
         const maxHeight = Math.min(window.innerHeight * 0.85, this.baseHeight);
         
-        // Maintain aspect ratio
         const aspectRatio = this.baseWidth / this.baseHeight;
         let newWidth, newHeight;
         
@@ -57,12 +53,10 @@ class Game {
         this.canvas.width = this.width;
         this.canvas.height = this.height;
         
-        // Update canvas CSS size for proper display
         this.canvas.style.width = this.width + 'px';
         this.canvas.style.height = this.height + 'px';
     }
 
-    // Utility method to hide/show all sprite elements
     hideAllSprites() {
         const allSprites = document.querySelectorAll('img[src*="sprites/"]');
         allSprites.forEach(sprite => {
@@ -84,7 +78,6 @@ class Game {
         document.getElementById('restartGameBtn').addEventListener('click', () => this.startGame());
         document.getElementById('gameOverToMenuBtn').addEventListener('click', () => this.uiManager.showMainMenu());
         
-        // Pause menu buttons
         document.getElementById('resumeGameBtn').addEventListener('click', () => this.resumeGame());
         document.getElementById('endRunBtn').addEventListener('click', () => this.endRun());
         document.getElementById('pauseToMenuBtn').addEventListener('click', () => this.endRunToMenu());
@@ -103,7 +96,6 @@ class Game {
     }
 
     resetGame() {
-        // Clean up all sprite elements first
         const allSprites = document.querySelectorAll('img[src*="sprites/"]');
         allSprites.forEach(sprite => {
             if (sprite.parentNode) {
@@ -111,7 +103,6 @@ class Game {
             }
         });
         
-        // Clean up existing entities before creating new ones
         if (this.player) {
             this.player.destroy();
         }
@@ -125,9 +116,9 @@ class Game {
         this.enemyProjectiles = [];
         this.xpOrbs = [];
         this.healthOrbs = [];
-        this.fireTrails = []; // Initialize fire trails
-        this.lightningEffects = []; // Initialize lightning effects
-        this.overloadEffects = []; // Initialize overload effects
+        this.fireTrails = [];
+        this.lightningEffects = [];
+        this.overloadEffects = [];
         this.score = 0;
         this.gameTime = 0;
         this.enemySpawnTimer = 0;
@@ -148,8 +139,8 @@ class Game {
         
         ExperienceOrb.prototype.collectionRadius = 80;
         this.powerUpManager.chosenPowerUps = [];
-        this.powerUpManager.chosenLegendaryPowerUps = []; // Reset legendary power-ups
-        this.powerUpManager.activeLegendaryPowerUps = []; // Reset active legendary power-ups
+        this.powerUpManager.chosenLegendaryPowerUps = [];
+        this.powerUpManager.activeLegendaryPowerUps = [];
 
         this.uiManager.updateScore(this.score);
         this.uiManager.updateLevel(this.player.level);
@@ -219,14 +210,12 @@ class Game {
             case 3: x = -30; y = Math.random() * this.height; break;
         }
 
-        // Ensure enemies are not spawned in the center of the screen
         const centerBuffer = 50;
         const isTooCloseToCenter = 
             Math.abs(x - this.width/2) < centerBuffer && 
             Math.abs(y - this.height/2) < centerBuffer;
             
         if (isTooCloseToCenter) {
-            // Adjust position away from center
             if (x > this.width/2) {
                 x += centerBuffer;
             } else {
@@ -303,9 +292,7 @@ class Game {
         this.uiManager.showMessage(`BOSS NÍVEL ${this.player.level} APARECEU!`, 4);
     }
 
-    // Novo método para criar efeito visual de explosão
     createExplosionEffect(x, y, radius) {
-        // Cria um efeito visual temporário de explosão
         const explosionEffect = {
             x: x,
             y: y,
@@ -316,14 +303,12 @@ class Game {
             timeLeft: 0.3
         };
         
-        // Adiciona à lista de efeitos (crie se não existir)
         if (!this.explosionEffects) {
             this.explosionEffects = [];
         }
         this.explosionEffects.push(explosionEffect);
     }
 
-    // Lightning Storm system
     triggerLightningStorm() {
         const activeEnemies = this.enemies.filter(e => e.active);
         if (activeEnemies.length === 0) return;
@@ -331,10 +316,8 @@ class Game {
         const targetEnemy = activeEnemies[Math.floor(Math.random() * activeEnemies.length)];
         this.createLightningEffect(targetEnemy.position.x, targetEnemy.position.y);
         
-        // Primary lightning damage
         targetEnemy.takeDamage(this.player.lightningDamage);
         
-        // Chain lightning to nearby enemies
         activeEnemies.forEach(enemy => {
             if (enemy === targetEnemy) return;
             const distance = targetEnemy.position.distance(enemy.position);
@@ -368,7 +351,6 @@ class Game {
         this.lightningEffects.push(effect);
     }
 
-    // Fire Trail system
     addFireTrail(x, y) {
         const trail = {
             x, y,
@@ -381,7 +363,6 @@ class Game {
         this.fireTrails.push(trail);
     }
 
-    // Neural Overload effect
     createOverloadEffect() {
         const effect = {
             duration: this.player.overloadDuration,
@@ -417,7 +398,6 @@ class Game {
         this.xpOrbs.forEach(orb => orb.update(dt, this.player));
         this.healthOrbs.forEach(orb => orb.update(dt, this.player));
 
-        // Collisions
         this.player.projectiles.forEach(proj => {
             if (!proj.active) return;
             this.enemies.forEach(enemy => {
@@ -449,7 +429,6 @@ class Game {
             }
         });
 
-        // Atualiza efeitos de explosão
         if (this.explosionEffects) {
             this.explosionEffects.forEach(effect => {
                 effect.timeLeft -= dt;
@@ -459,13 +438,11 @@ class Game {
             this.explosionEffects = this.explosionEffects.filter(effect => effect.timeLeft > 0);
         }
 
-        // Update fire trails
         if (this.fireTrails) {
             this.fireTrails.forEach(trail => {
                 trail.timeLeft -= dt;
                 trail.alpha = trail.timeLeft / trail.duration;
                 
-                // Damage enemies in fire trail
                 this.enemies.forEach(enemy => {
                     if (!enemy.active) return;
                     const distance = Math.sqrt((enemy.position.x - trail.x) ** 2 + (enemy.position.y - trail.y) ** 2);
@@ -477,7 +454,6 @@ class Game {
             this.fireTrails = this.fireTrails.filter(trail => trail.timeLeft > 0);
         }
 
-        // Update lightning effects
         if (this.lightningEffects) {
             this.lightningEffects.forEach(effect => {
                 effect.timeLeft -= dt;
@@ -486,7 +462,6 @@ class Game {
             this.lightningEffects = this.lightningEffects.filter(effect => effect.timeLeft > 0);
         }
 
-        // Update overload effects
         if (this.overloadEffects) {
             this.overloadEffects.forEach(effect => {
                 effect.timeLeft -= dt;
@@ -514,19 +489,16 @@ class Game {
         this.ctx.fillStyle = '#080818';
         this.ctx.fillRect(0, 0, this.width, this.height);
 
-        // Draw fire trails
         if (this.fireTrails) {
             this.fireTrails.forEach(trail => {
                 this.ctx.save();
                 this.ctx.globalAlpha = trail.alpha;
                 
-                // Outer fire
                 this.ctx.fillStyle = '#FF4500';
                 this.ctx.beginPath();
                 this.ctx.arc(trail.x, trail.y, trail.radius, 0, Math.PI * 2);
                 this.ctx.fill();
                 
-                // Inner fire
                 this.ctx.fillStyle = '#FFD700';
                 this.ctx.beginPath();
                 this.ctx.arc(trail.x, trail.y, trail.radius * 0.6, 0, Math.PI * 2);
@@ -542,7 +514,6 @@ class Game {
         this.xpOrbs.forEach(orb => orb.draw(this.ctx));
         this.healthOrbs.forEach(orb => orb.draw(this.ctx));
         
-        // Draw lightning effects
         if (this.lightningEffects) {
             this.lightningEffects.forEach(effect => {
                 this.ctx.save();
@@ -553,19 +524,16 @@ class Game {
                 this.ctx.shadowBlur = 15;
                 
                 if (effect.from && effect.to) {
-                    // Chain lightning
                     this.ctx.beginPath();
                     this.ctx.moveTo(effect.from.x, effect.from.y);
                     this.ctx.lineTo(effect.to.x, effect.to.y);
                     this.ctx.stroke();
                 } else {
-                    // Main lightning bolt
                     this.ctx.beginPath();
                     this.ctx.moveTo(effect.x, 0);
                     this.ctx.lineTo(effect.x, effect.y);
                     this.ctx.stroke();
                     
-                    // Lightning circle
                     this.ctx.strokeStyle = '#00FFFF';
                     this.ctx.lineWidth = 2;
                     this.ctx.beginPath();
@@ -576,7 +544,6 @@ class Game {
             });
         }
         
-        // Neural Overload screen effect
         if (this.overloadEffects && this.overloadEffects.length > 0) {
             this.ctx.save();
             this.ctx.globalAlpha = 0.1 + 0.05 * Math.sin(Date.now() * 0.02);
@@ -585,7 +552,6 @@ class Game {
             this.ctx.restore();
         }
         
-        // Desenha efeitos de explosão
         if (this.explosionEffects) {
             this.explosionEffects.forEach(effect => {
                 this.ctx.save();
