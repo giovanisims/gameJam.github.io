@@ -97,6 +97,12 @@ class PowerUpManager {
         const options = this.getRandomPowerUps(3);
         const optionsContainer = document.getElementById('powerUpOptions');
         optionsContainer.innerHTML = '';
+        
+        // Reset the grid layout
+        optionsContainer.style.display = 'grid';
+        optionsContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        optionsContainer.style.gap = '32px';
+        optionsContainer.style.justifyItems = 'center';
 
         options.forEach((powerUp, index) => {
             const button = document.createElement('button');
@@ -107,7 +113,17 @@ class PowerUpManager {
                 button.classList.add('legendary-powerup');
             }
             button.setAttribute('id', `powerup-${index}`);
-            button.innerHTML = `<strong>${powerUp.name}</strong><br><small>${powerUp.description}</small>`;
+            
+            // Create structure for the button content
+            const strongElement = document.createElement('strong');
+            strongElement.textContent = powerUp.name;
+            
+            const smallElement = document.createElement('small');
+            smallElement.textContent = powerUp.description;
+            
+            button.appendChild(strongElement);
+            button.appendChild(document.createElement('br'));
+            button.appendChild(smallElement);
             
             button.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -139,44 +155,105 @@ class PowerUpManager {
     showLegendaryReplaceInterface(newLegendary) {
         const optionsContainer = document.getElementById('powerUpOptions');
         optionsContainer.innerHTML = '';
+        
+        // Reset the grid layout before adding new content
+        optionsContainer.style.display = 'grid';
+        optionsContainer.style.gridTemplateColumns = '1fr';
 
-        const title = document.createElement('div');
-        title.innerHTML = '<h3 style="grid-column: 1 / -1; margin: 0; color: #FFD700;">Limite de Power-ups Lendários Atingido!</h3>';
-        title.style.textAlign = 'center';
-        optionsContainer.appendChild(title);
-
-        const subtitle = document.createElement('div');
-        subtitle.innerHTML = `<p style="grid-column: 1 / -1; margin: 10px 0; color: #FFF;">Você escolheu "${newLegendary.name}". Substitua um power-up lendário ativo:</p>`;
-        subtitle.style.textAlign = 'center';
-        optionsContainer.appendChild(subtitle);
-
+        // Create a wrapper for the title and subtitle to ensure proper layout
+        const headerWrapper = document.createElement('div');
+        headerWrapper.style.gridColumn = '1 / -1';
+        headerWrapper.style.width = '100%';
+        headerWrapper.style.textAlign = 'center';
+        headerWrapper.style.marginBottom = '20px';
+        
+        // Add title
+        const title = document.createElement('h3');
+        title.style.margin = '0';
+        title.style.color = '#FFD700';
+        title.textContent = 'Limite de Power-ups Lendários Atingido!';
+        headerWrapper.appendChild(title);
+        
+        // Add subtitle
+        const subtitle = document.createElement('p');
+        subtitle.style.margin = '10px 0';
+        subtitle.style.color = '#FFF';
+        subtitle.textContent = `Você escolheu "${newLegendary.name}". Substitua um power-up lendário ativo:`;
+        headerWrapper.appendChild(subtitle);
+        
+        optionsContainer.appendChild(headerWrapper);
+        
+        // Create container for the legendary buttons to ensure proper layout
+        const legendaryButtonsContainer = document.createElement('div');
+        legendaryButtonsContainer.style.display = 'grid';
+        legendaryButtonsContainer.style.gridTemplateColumns = this.activeLegendaryPowerUps.length === 2 ? '1fr 1fr' : '1fr';
+        legendaryButtonsContainer.style.gap = '32px';
+        legendaryButtonsContainer.style.width = '100%';
+        legendaryButtonsContainer.style.justifyItems = 'center';
+        
+        // Add the legendary power-up buttons
         this.activeLegendaryPowerUps.forEach((legendaryName, index) => {
             const button = document.createElement('button');
             button.classList.add('powerup-button', 'legendary-powerup', 'replace-button');
             button.setAttribute('id', `replace-${index}`);
             
             const legendary = this.legendaryPowerUps.find(p => p.name === legendaryName);
-            button.innerHTML = `<strong>Substituir: ${legendary.name}</strong><br><small>${legendary.description}</small>`;
+            
+            // Create structure for the button content
+            const strongElement = document.createElement('strong');
+            strongElement.textContent = `Substituir: ${legendary.name}`;
+            
+            const smallElement = document.createElement('small');
+            smallElement.textContent = legendary.description;
+            
+            button.appendChild(strongElement);
+            button.appendChild(document.createElement('br'));
+            button.appendChild(smallElement);
             
             button.onclick = () => {
                 this.replaceLegendaryPowerUp(legendaryName, newLegendary);
             };
             
-            optionsContainer.appendChild(button);
+            legendaryButtonsContainer.appendChild(button);
         });
-
+        
+        optionsContainer.appendChild(legendaryButtonsContainer);
+        
+        // Create a wrapper for the cancel button
+        const cancelWrapper = document.createElement('div');
+        cancelWrapper.style.gridColumn = '1 / -1';
+        cancelWrapper.style.width = '100%';
+        cancelWrapper.style.marginTop = '20px';
+        cancelWrapper.style.display = 'flex';
+        cancelWrapper.style.justifyContent = 'center';
+        
+        // Add cancel button
         const cancelButton = document.createElement('button');
         cancelButton.classList.add('powerup-button');
-        cancelButton.innerHTML = '<strong>Cancelar</strong><br><small>Não pegar este power-up lendário</small>';
-        cancelButton.style.gridColumn = '1 / -1';
         cancelButton.style.background = '#444444';
         cancelButton.style.borderColor = '#666666';
+        cancelButton.style.minWidth = '300px';
+        cancelButton.style.minHeight = 'auto';
+        cancelButton.style.padding = '15px 20px';
+        
+        const cancelStrongElement = document.createElement('strong');
+        cancelStrongElement.textContent = 'Cancelar';
+        cancelStrongElement.style.display = 'block';
+        cancelStrongElement.style.height = 'auto';
+        
+        const cancelSmallElement = document.createElement('small');
+        cancelSmallElement.textContent = 'Não pegar este power-up lendário';
+        
+        cancelButton.appendChild(cancelStrongElement);
+        cancelButton.appendChild(document.createElement('br'));
+        cancelButton.appendChild(cancelSmallElement);
         
         cancelButton.onclick = () => {
             this.showCanceledPowerUpOptions();
         };
         
-        optionsContainer.appendChild(cancelButton);
+        cancelWrapper.appendChild(cancelButton);
+        optionsContainer.appendChild(cancelWrapper);
         
         document.getElementById('levelUpScreen').style.display = 'flex';
     }
@@ -185,24 +262,60 @@ class PowerUpManager {
         const normalOptions = this.availablePowerUps.slice(0, 3);
         const optionsContainer = document.getElementById('powerUpOptions');
         optionsContainer.innerHTML = '';
-
-        const title = document.createElement('div');
-        title.innerHTML = '<h3 style="grid-column: 1 / -1; margin: 0; color: #00FFFF;">Escolha um power-up alternativo:</h3>';
-        title.style.textAlign = 'center';
-        optionsContainer.appendChild(title);
-
+        
+        // Reset the grid layout
+        optionsContainer.style.display = 'grid';
+        optionsContainer.style.gridTemplateColumns = '1fr';
+        
+        // Create a wrapper for the title
+        const headerWrapper = document.createElement('div');
+        headerWrapper.style.gridColumn = '1 / -1';
+        headerWrapper.style.width = '100%';
+        headerWrapper.style.textAlign = 'center';
+        headerWrapper.style.marginBottom = '20px';
+        
+        // Add title
+        const title = document.createElement('h3');
+        title.style.margin = '0';
+        title.style.color = '#00FFFF';
+        title.textContent = 'Escolha um power-up alternativo:';
+        headerWrapper.appendChild(title);
+        
+        optionsContainer.appendChild(headerWrapper);
+        
+        // Create container for power-up buttons to ensure proper layout
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.style.display = 'grid';
+        buttonsContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        buttonsContainer.style.gap = '32px';
+        buttonsContainer.style.width = '100%';
+        buttonsContainer.style.justifyItems = 'center';
+        
+        // Add power-up buttons
         normalOptions.forEach((powerUp, index) => {
             const button = document.createElement('button');
             button.classList.add('powerup-button');
             button.setAttribute('id', `powerup-${index}`);
-            button.innerHTML = `<strong>${powerUp.name}</strong><br><small>${powerUp.description}</small>`;
+            
+            // Create structure for the button content
+            const strongElement = document.createElement('strong');
+            strongElement.textContent = powerUp.name;
+            
+            const smallElement = document.createElement('small');
+            smallElement.textContent = powerUp.description;
+            
+            button.appendChild(strongElement);
+            button.appendChild(document.createElement('br'));
+            button.appendChild(smallElement);
             
             button.onclick = () => {
                 this.selectPowerUp(powerUp);
             };
             
-            optionsContainer.appendChild(button);
+            buttonsContainer.appendChild(button);
         });
+        
+        optionsContainer.appendChild(buttonsContainer);
     }
 
     replaceLegendaryPowerUp(oldLegendaryName, newLegendary) {
