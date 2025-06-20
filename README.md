@@ -1,9 +1,9 @@
 # PARTICIPANTS
 
-* Livia Rosemach Oliveira
-* Giovani Nota Simões
-* Sarah Maneira
-* Lucas Brisch Zanlorenzi
+* Livia Rosemach Oliveira;
+* Giovani Nota Simões;
+* Sarah Maneira;
+* Lucas Brisch Zanlorenzi.
 
 # Presentation video
 
