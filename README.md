@@ -5,6 +5,10 @@ Giovani Nota Simões
 Sarah Maneira
 Lucas Brisch Zanlorenzi
 
+# Presentation video
+
+https://youtu.be/ZSwkhpQl7k4
+
 # INSTRUCTIONS
 
 Execute o HTML no "Live Server" ou onde preferir, depois use WASD ou as setas do teclado para mover o jogador, que atira automaticamente. Mate os inimigos para ganhar uma pequena quantidade de XP, então pegue os orbes de XP que eles dropam para ganhar uma quantidade maior, também podem dropar um orbe de vida. Conforme você sobe de nível, escolha os upgrades desejados e veja até onde consegue chegar!
