@@ -70,9 +70,25 @@
     <div id="pauseMenu" class="menu-container" style="display:none;">
         <h1>Jogo Pausado</h1>
         <p>Score Atual: <span id="currentScoreDisplay">0</span></p>
+        
+        <div class="volume-control">
+            <label for="pauseVolumeSlider">Volume da Música:</label>
+            <input type="range" id="pauseVolumeSlider" min="0" max="100" value="30" class="volume-slider">
+            <span id="pauseVolumeValue">30%</span>
+        </div>
+        
         <button id="resumeGameBtn" class="menu-button">Continuar</button>
         <button id="endRunBtn" class="menu-button">Finalizar Partida</button>
-        <button id="pauseToMenuBtn" class="menu-button">Menu Principal</button>
+    </div>
+
+    <div id="confirmationDialog" class="menu-container" style="display:none;">
+        <h1>Confirmar Ação</h1>
+        <p id="confirmationMessage">Tem certeza de que deseja finalizar a partida?</p>
+        <p style="color: #ff6666; font-size: 0.9em;">Seu progresso será perdido.</p>
+        <div style="display: flex; gap: 20px; margin-top: 20px;">
+            <button id="confirmYesBtn" class="menu-button">Sim, Finalizar</button>
+            <button id="confirmNoBtn" class="menu-button">Cancelar</button>
+        </div>
     </div>
 
     <canvas id="gameCanvas"></canvas>

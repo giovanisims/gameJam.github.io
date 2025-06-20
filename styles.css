@@ -118,6 +118,65 @@ canvas {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.volume-control {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.volume-control label {
+    color: #e0faff;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.volume-slider {
+    width: 200px;
+    height: 6px;
+    background: #333;
+    outline: none;
+    border-radius: 3px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(to bottom, #aa0000, #660000);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    background: linear-gradient(to bottom, #cc0000, #880000);
+    transform: scale(1.1);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(to bottom, #aa0000, #660000);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#volumeValue, #pauseVolumeValue {
+    color: #ffcc00;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: center;
+}
+
 .about-container p {
     margin: 12px 0;
     font-size: 1.32em;
