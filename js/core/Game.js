@@ -28,6 +28,8 @@ class Game {
         this.lastTime = 0;
         this.isPaused = false;
 
+        this.initMusic();
+
         this.initControls();
         this.uiManager.showMainMenu();
         this.uiManager.updateHighScore();
@@ -57,6 +59,142 @@ class Game {
         this.canvas.style.height = this.height + 'px';
     }
 
+    initMusic() {
+        this.backgroundMusic = null;
+        this.musicEnabled = true;
+        this.musicVolume = 0.3;
+        
+        this.loadBackgroundMusic();
+        this.initVolumeControls();
+    }
+
+    initVolumeControls() {
+        const pauseVolumeSlider = document.getElementById('pauseVolumeSlider');
+        const pauseVolumeValue = document.getElementById('pauseVolumeValue');
+        
+        if (pauseVolumeSlider && pauseVolumeValue) {
+            pauseVolumeSlider.addEventListener('input', (e) => {
+                const volume = e.target.value / 100;
+                this.setMusicVolume(volume);
+                pauseVolumeValue.textContent = `${e.target.value}%`;
+            });
+        }
+    }
+
+    setMusicVolume(volume) {
+        this.musicVolume = volume;
+        if (this.backgroundMusic) {
+            this.backgroundMusic.volume = volume;
+        }
+    }
+
+    loadBackgroundMusic() {
+        try {
+            this.backgroundMusic = new Audio();
+            this.backgroundMusic.loop = true;
+            this.backgroundMusic.volume = this.musicVolume;
+            
+            this.backgroundMusic.src = 'music/blood_moon_rising.mp3';
+            
+            this.backgroundMusic.addEventListener('canplaythrough', () => {
+                console.log('Background music loaded: blood moon rising.mp3');
+            }, { once: true });
+            
+            this.backgroundMusic.addEventListener('error', () => {
+                console.warn('Could not load blood moon rising.mp3. Make sure the file is in the music/ folder.');
+                this.musicEnabled = false;
+            }, { once: true });
+            
+        } catch (e) {
+            console.warn('Audio not supported:', e);
+            this.musicEnabled = false;
+        }
+    }
+
+    startBackgroundMusic() {
+        if (!this.musicEnabled || !this.backgroundMusic) return;
+        
+        try {
+            this.backgroundMusic.currentTime = 0;
+            const playPromise = this.backgroundMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log('Background music started');
+                }).catch(error => {
+                    console.log('Autoplay prevented. Music will start after user interaction:', error);
+                });
+            }
+        } catch (e) {
+            console.warn('Failed to start background music:', e);
+        }
+    }
+
+    stopBackgroundMusic() {
+        if (this.backgroundMusic) {
+            try {
+                this.backgroundMusic.pause();
+                this.backgroundMusic.currentTime = 0;
+            } catch (e) {
+                console.warn('Error stopping music:', e);
+            }
+        }
+    }
+
+    toggleMusic() {
+        if (!this.musicEnabled || !this.backgroundMusic) return;
+        
+        if (this.backgroundMusic.paused) {
+            this.startBackgroundMusic();
+        } else {
+            this.stopBackgroundMusic();
+        }
+    }
+
+    pauseBackgroundMusic() {
+        if (this.backgroundMusic && !this.backgroundMusic.paused) {
+            try {
+                this.backgroundMusic.pause();
+            } catch (e) {
+                console.warn('Error pausing music:', e);
+            }
+        }
+    }
+
+    resumeBackgroundMusic() {
+        if (this.backgroundMusic && this.backgroundMusic.paused) {
+            try {
+                const playPromise = this.backgroundMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.warn('Error resuming music:', error);
+                    });
+                }
+            } catch (e) {
+                console.warn('Error resuming music:', e);
+            }
+        }
+    }
+
+    confirmEndRun() {
+        this.showConfirmationDialog();
+    }
+
+    showConfirmationDialog() {
+        document.getElementById('confirmationDialog').style.display = 'flex';
+        document.getElementById('pauseMenu').style.display = 'none';
+    }
+
+    hideConfirmationDialog() {
+        document.getElementById('confirmationDialog').style.display = 'none';
+        document.getElementById('pauseMenu').style.display = 'flex';
+    }
+
+    handleConfirmYes() {
+        this.hideConfirmationDialog();
+        this.endRun();
+    }
+
     hideAllSprites() {
         const allSprites = document.querySelectorAll('img[src*="sprites/"]');
         allSprites.forEach(sprite => {
@@ -79,8 +217,10 @@ class Game {
         document.getElementById('gameOverToMenuBtn').addEventListener('click', () => this.uiManager.showMainMenu());
         
         document.getElementById('resumeGameBtn').addEventListener('click', () => this.resumeGame());
-        document.getElementById('endRunBtn').addEventListener('click', () => this.endRun());
-        document.getElementById('pauseToMenuBtn').addEventListener('click', () => this.endRunToMenu());
+        document.getElementById('endRunBtn').addEventListener('click', () => this.confirmEndRun());
+        
+        document.getElementById('confirmYesBtn').addEventListener('click', () => this.handleConfirmYes());
+        document.getElementById('confirmNoBtn').addEventListener('click', () => this.hideConfirmationDialog());
 
         window.addEventListener('keydown', (e) => {
             if (this.player) this.player.keys[e.key] = true;
@@ -88,6 +228,8 @@ class Game {
                 this.pauseGame();
             } else if (e.key === 'Escape' && this.gameState === 'paused') {
                 this.resumeGame();
+            } else if (e.key === 'm' || e.key === 'M') {
+                this.toggleMusic();
             }
         });
         window.addEventListener('keyup', (e) => {
@@ -153,6 +295,7 @@ class Game {
         this.resetGame();
         this.gameState = 'playing';
         this.uiManager.showGameScreen();
+        this.startBackgroundMusic();
         this.lastTime = performance.now();
         this.gameLoop(performance.now());
     }
@@ -163,6 +306,8 @@ class Game {
             if (!isLevelUp) {
                 this.gameState = 'paused';
                 this.uiManager.showPauseMenu(this.score);
+                // Pause music when game is paused
+                this.pauseBackgroundMusic();
             } else {
                 this.gameState = 'levelUp';
             }
@@ -177,6 +322,8 @@ class Game {
             this.uiManager.messageDisplay.style.display = 'none';
             if (wasPaused) {
                 this.uiManager.hidePauseMenu();
+                // Resume music when game is resumed
+                this.resumeBackgroundMusic();
             }
             this.lastTime = performance.now();
             requestAnimationFrame((t) => this.gameLoop(t));
@@ -184,18 +331,14 @@ class Game {
     }
 
     endRun() {
+        this.stopBackgroundMusic();
         this.gameState = 'gameOver';
         this.uiManager.pauseMenu.style.display = 'none';
         this.uiManager.showGameOverScreen(this.score);
     }
 
-    endRunToMenu() {
-        this.gameState = 'gameOver';
-        this.uiManager.pauseMenu.style.display = 'none';
-        this.uiManager.showMainMenu();
-    }
-
     gameOver() {
+        this.stopBackgroundMusic();
         this.gameState = 'gameOver';
         this.uiManager.showGameOverScreen(this.score);
     }
