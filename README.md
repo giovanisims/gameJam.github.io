@@ -1,41 +1,39 @@
 # Dracula Survivors
 
-**Dracula Survivors** é um jogo estilo roguelike 2D desenvolvido em JavaScript, utilizando a API Canvas para renderização gráfica. Inspirado no clássico *Vampire Survivors*, o jogo foi criado como projeto para a disciplina *Canvas & Games*, focando em programação orientada a objetos e boas práticas no desenvolvimento de jogos.
+**Dracula Survivors** is a 2D roguelike-style game developed in JavaScript using the Canvas API for graphical rendering. Inspired by the classic *Vampire Survivors*, the game was created as a project for the *Canvas & Games* course, focusing on object-oriented programming and best practices in game development.
 
-## 🎮 Como jogar
+## 🎮 How to Play
 
-- Execute o arquivo HTML em um ambiente com *Live Server* ou qualquer servidor local de sua preferência.
-- Use as teclas **WASD** ou as **setas do teclado** para movimentar o personagem.
-- O jogador atira automaticamente nos inimigos.
-- Elimine os inimigos para ganhar XP.
-- Colete os orbes de XP que eles dropam para aumentar sua experiência.
-- Alguns inimigos também dropam orbes de vida.
-- Ao subir de nível, escolha seus upgrades para melhorar suas habilidades.
-- Veja até onde consegue sobreviver enfrentando fases com dificuldade crescente!
+* Run the HTML file in a *Live Server* environment or any local server of your choice.
+* Use the **WASD** keys or the **arrow keys** to move the character.
+* The player automatically shoots at enemies.
+* Defeat enemies to earn XP.
+* Collect XP orbs dropped by enemies to gain more experience.
+* Some enemies also drop health orbs.
+* When leveling up, choose your desired upgrades to improve your abilities.
+* See how long you can survive through increasingly difficult stages!
+
+## 🕹️ Main Features
+
+* Start menu with title, highscore display, start button, and "About" screen button.
+* "About" screen displaying participants' names.
+* Clear indication of player progression: stage transitions, difficulty increase, score, lives, and level.
+* Responsive and intuitive controls.
+* Proper use of vectors for positioning and movement of game objects.
+* Random generation of enemies, drops, upgrade options, and shooting behavior of enemies.
+* Use of graphic and sound assets for the player, enemies, and bosses.
+* Consistent rotation and transformation of images according to entity movement.
+* Code organized in classes for better modularity and maintainability (e.g., Vector2D, Entity, UIManager).
+
+## Participants
+
+* Livia Rosembach Oliveira
+* Giovani Nota Simões
+* Sarah Maneira
+* Lucas Brisch Zanlorenzi
 
 
-## 🕹️ Funcionalidades principais
-
-- Menu inicial com título, placar (highscore), botão para iniciar o jogo e botão para a tela "Sobre".
-- Tela "Sobre" com nome dos participantes.
-- Indicação clara da progressão do jogador: troca de fase, aumento da dificuldade, pontuação, vidas e nível.
-- Controles responsivos e intuitivos.
-- Uso correto de vetores para posicionamento e movimentação dos objetos no jogo.
-- Geração aleatória de inimigos, drops, opções de upgrades e comportamento dos inimigos que atiram.
-- Utilização de assets gráficos e sonoros para player, inimigos e chefes (boss).
-- Rotação e transformação consistente das imagens conforme movimentação das entidades.
-- Organização do código em classes para melhor modularização e manutenção (ex: Vector2D, Entity, UIManager).
-
-
-## Participantes
-
-- Livia Rosembach Oliveira  
-- Giovani Nota Simões  
-- Sarah Maneira  
-- Lucas Brisch Zanlorenzi  
-
----
-
-## 🔗 Link para jogar
+## 🔗 Play the Game
 
 [https://giovanisims.github.io/gameJam.github.io/](https://giovanisims.github.io/gameJam.github.io/)
+
