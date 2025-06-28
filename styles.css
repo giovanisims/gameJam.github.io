@@ -665,10 +665,6 @@ body img[src*="sprites/melee_enemy.webp"] {
     transform: scale(1.02);
 }
 
-a {
-    
-}
-
 /* Screen transition effects */
 @keyframes fadeInScale {
     from {
